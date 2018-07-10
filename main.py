@@ -16,8 +16,6 @@ class Board:
         self.x = []
         for i in range(0,n):
             tempboard = []
-            tempboard.extend(str(args.boardsize))
-            args.boardsize -= 1
             for j in range(0,n):
                 if i & 1 and j & 1 or not i & 1 and not j & 1:
                     tempboard += [' '] 
@@ -29,7 +27,10 @@ class Board:
 
     def print(self):
         for i in range(0,self.n):
+            print(str(self.n) + "\t", end ='')
             print(*self.board[i], sep = '')
+            self.n -= 1
+        print("\t", end ='')
         print(*self.x, sep = '')
 
 board1 = Board(args.boardsize)
