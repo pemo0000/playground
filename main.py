@@ -26,10 +26,11 @@ class Board:
         self.n=n
 
     def print(self):
+        y = self.n
         for i in range(0,self.n):
-            print(str(self.n) + "\t", end ='')
+            print(str(y) + "\t", end ='')
             print(*self.board[i], sep = '')
-            self.n -= 1
+            y -= 1
         print("\t", end ='')
         print(*self.x, sep = '')
 
