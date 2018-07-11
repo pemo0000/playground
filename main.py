@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import argparse, string
+import argparse, string, re
 
 print("Running...\n")
 
@@ -19,25 +19,25 @@ class Board:
             tempboard = []
             for j in range(0,boardsize):
                 if i & 1 and j & 1 or not i & 1 and not j & 1:
-                    tempboard += [' '] 
+                    tempboard += ['X'] 
                 else:
-                    tempboard += ['X']
+                    tempboard += [' ']
             self.board += [tempboard]
             self.x += self.alphabet[i]
         self.boardsize=boardsize
 
     def print(self):
-        y = self.boardsize
-        for i in range(0,self.boardsize):
-            print(str(y) + "\t", end ='')
+        for i in range(self.boardsize,0,-1):
+            print(str(i) + "\t", end ='')
+            i -= 1 
             print(*self.board[i], sep = '')
-            y -= 1
         print("\t", end ='')
         print(*self.x, sep = '')
 
     def set_piece(self, coordinate):
-        splitCoordinate = list(coordinate)        
-        self.board[self.alphabet.index(splitCoordinate[0])][int(splitCoordinate[1])] = "P"
+        match = re.match(r"([a-z]+)([0-9]+)", args.coordinate, re.I)
+        items = match.groups()
+        self.board[(int(items[1])-1)][self.alphabet.index(items[0])] = "P"
 
 board1 = Board(args.boardsize)
 board1.set_piece(args.coordinate)
