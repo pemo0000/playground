@@ -19,7 +19,7 @@ class Board:
                 else:
                     tempboard += [' ']
             self.board += [tempboard]
-            self.x += self.alphabet[i]
+            self.x += Board.alphabet[i]
         self.boardsize = boardsize
 
     def print(self):

@@ -14,8 +14,7 @@ parser.add_argument("-c", "--coordinate",
 args = parser.parse_args()
 match = re.match(r'([a-z]+)([0-9]+)', args.coordinate, re.I)
 items = match.groups()
-alphabet = list(string.ascii_lowercase)
-x = alphabet.index(items[0])
+x = Board.alphabet.index(items[0])
 y = int(items[1])
 
 #Main stuff...
