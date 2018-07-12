@@ -23,7 +23,7 @@ class Board:
         self.boardsize = boardsize
 
     def print(self):
-        """Print the board."""
+        """Prints the board."""
         for i in range(self.boardsize - 1, -1, -1):
             print(str(i + 1) + "\t", end='')
             print(*self.board[i], sep='')
@@ -31,5 +31,26 @@ class Board:
         print(*self.x, sep='')
 
     def put_piece(self, x, y):
-        """Put a chesspiece on a board."""
+        """Puts a chesspiece on a board."""
         self.board[y - 1][x] = "P"
+
+    def horizontal_squares(self, x, y):
+        """returns a list of horizontal squares/coordinates P can visit except its own position."""
+        horizontalSquares = []
+        for i in range(0, self.boardsize):
+            tempCoordinate = [i, y]
+            horizontalSquares.append(tempCoordinate)
+        del horizontalSquares[x]
+        print("\nhorizontal squares/coordinates P can visit:\n" + str(horizontalSquares))
+        return horizontalSquares
+
+    def vertical_squares(self, x, y):
+        """returns a list of vertical squares/coordinates P can visit except its own position."""
+        verticalSquares = []
+        for i in range(0, self.boardsize):
+            tempCoordinate = [x, i + 1]
+            verticalSquares.append(tempCoordinate)
+        del verticalSquares[y - 1]
+        print("\nvertical squares/coordinates P can visit:\n" + str(verticalSquares))
+        return verticalSquares
+
