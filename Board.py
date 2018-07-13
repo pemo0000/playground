@@ -31,25 +31,34 @@ class Board:
         print(*self.x, sep='')
 
     def put_piece(self, x, y):
-        """Puts a chesspiece on a board."""
+        """Puts a chesspiece on a board.
+        :param x:
+        :param y:
+        """
         self.board[y - 1][x] = "P"
 
     def horizontal_squares(self, x, y):
-        """returns a list of horizontal squares/coordinates P can visit except its own position."""
+        """returns a list of horizontal squares/coordinates P can visit except its own position.
+        :param x:
+        :param y:
+        :return:
+        """
         horizontalSquares = []
         for i in range(0, self.boardsize):
-            tempCoordinate = [i, y]
-            horizontalSquares.append(tempCoordinate)
+            horizontalSquares.append([i + 1, y])
         del horizontalSquares[x]
         print("\nhorizontal squares/coordinates P can visit:\n" + str(horizontalSquares))
         return horizontalSquares
 
     def vertical_squares(self, x, y):
-        """returns a list of vertical squares/coordinates P can visit except its own position."""
+        """returns a list of vertical squares/coordinates P can visit except its own position.
+        :param x:
+        :param y:
+        :return:
+        """
         verticalSquares = []
         for i in range(0, self.boardsize):
-            tempCoordinate = [x, i + 1]
-            verticalSquares.append(tempCoordinate)
+            verticalSquares.append([x, i + 1])
         del verticalSquares[y - 1]
         print("\nvertical squares/coordinates P can visit:\n" + str(verticalSquares))
         return verticalSquares
