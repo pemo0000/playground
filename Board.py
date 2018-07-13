@@ -63,3 +63,28 @@ class Board:
         print("\nvertical squares/coordinates P can visit:\n" + str(verticalSquares))
         return verticalSquares
 
+    def diagonal_squares(self, x, y):
+        """returns a list of diagonal squares/coordinates P can visit except its own position.
+        """
+        xtemp1 = x
+        ytemp1 = y
+        diagonalSquaresUp = []
+        for i in range(ytemp1, self.boardsize + 1):
+            diagonalSquaresUp.append([xtemp1 + 1, ytemp1])
+            xtemp1 += 1
+            ytemp1 += 1
+        diagonalSquaresUp.pop(0)
+        print("\ndiagonal squares/coordinates UP P can visit:\n" + str(diagonalSquaresUp))
+
+        xtemp2 = x
+        ytemp2 = y
+        diagonalSquaresDown = []
+        for i in range(ytemp2 - 1, 1, -1):
+            xtemp2 -= 1
+            ytemp2 -= 1
+            diagonalSquaresDown.append([xtemp2 + 1, ytemp2])
+        # diagonalSquaresDown.pop(0)
+        print("\ndiagonal squares/coordinates DOWN P can visit:\n" + str(diagonalSquaresDown))
+
+        diagonalSquares = diagonalSquaresUp + diagonalSquaresDown
+        print("\ndiagonal squares/coordinates P can visit:\n" + str(diagonalSquares))
