@@ -15,7 +15,7 @@ args = parser.parse_args()
 match = re.match(r'([a-z]+)([0-9]+)', args.coordinate, re.I)
 items = match.groups()
 x = Board.alphabet.index(items[0])
-y = int(items[1])
+y = int(items[1]) - 1
 
 #Main stuff...
 board1 = Board(args.boardsize)

@@ -35,56 +35,76 @@ class Board:
         :param x:
         :param y:
         """
-        self.board[y - 1][x] = "P"
+        self.board[y][x] = "P"
 
     def horizontal_squares(self, x, y):
         """returns a list of horizontal squares/coordinates P can visit except its own position.
-        :param x:
-        :param y:
-        :return:
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of horizontal coordinates the piece can visit except its own position
         """
         horizontalSquares = []
         for i in range(0, self.boardsize):
-            horizontalSquares.append([i + 1, y])
+            horizontalSquares.append([i, y])
         del horizontalSquares[x]
         print("\nhorizontal squares/coordinates P can visit:\n" + str(horizontalSquares))
         return horizontalSquares
 
     def vertical_squares(self, x, y):
         """returns a list of vertical squares/coordinates P can visit except its own position.
-        :param x:
-        :param y:
-        :return:
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of vertical coordinates the piece can visit except its own position
         """
         verticalSquares = []
         for i in range(0, self.boardsize):
-            verticalSquares.append([x, i + 1])
-        del verticalSquares[y - 1]
+            verticalSquares.append([x, i])
+        del verticalSquares[y]
         print("\nvertical squares/coordinates P can visit:\n" + str(verticalSquares))
         return verticalSquares
 
     def diagonal_squares(self, x, y):
         """returns a list of diagonal squares/coordinates P can visit except its own position.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of diagonal coordinates the piece can visit except its own position
         """
         xtemp1 = x
         ytemp1 = y
-        diagonalSquaresUp = []
-        for i in range(ytemp1, self.boardsize + 1):
-            diagonalSquaresUp.append([xtemp1 + 1, ytemp1])
+        diagonalSquaresRightUp = []
+        for i in range(ytemp1, self.boardsize):
+            diagonalSquaresRightUp.append([xtemp1, ytemp1])
             xtemp1 += 1
             ytemp1 += 1
-        diagonalSquaresUp.pop(0)
-        print("\ndiagonal squares/coordinates UP P can visit:\n" + str(diagonalSquaresUp))
+        diagonalSquaresRightUp.pop(0)
+        print("\ndiagonal squares/coordinates RIGHT UP P can visit:\n" + str(diagonalSquaresRightUp))
 
         xtemp2 = x
         ytemp2 = y
-        diagonalSquaresDown = []
-        for i in range(ytemp2 - 1, 1, -1):
+        diagonalSquaresLeftDown = []
+        for i in range(ytemp2, 0, -1):
             xtemp2 -= 1
             ytemp2 -= 1
-            diagonalSquaresDown.append([xtemp2 + 1, ytemp2])
-        # diagonalSquaresDown.pop(0)
-        print("\ndiagonal squares/coordinates DOWN P can visit:\n" + str(diagonalSquaresDown))
+            diagonalSquaresLeftDown.append([xtemp2, ytemp2])
+        print("\ndiagonal squares/coordinates LEFT DOWN P can visit:\n" + str(diagonalSquaresLeftDown))
 
-        diagonalSquares = diagonalSquaresUp + diagonalSquaresDown
+        xtemp3 = x
+        ytemp3 = y
+        diagonalSquaresLeftUp = []
+        for i in range(ytemp3, self.boardsize):
+            diagonalSquaresLeftUp.append([xtemp3, ytemp3])
+            xtemp3 -= 1
+            ytemp3 += 1
+        print("\ndiagonal squares/coordinates LEFT UP P can visit:\n" + str(diagonalSquaresLeftUp))
+
+        xtemp4 = x
+        ytemp4 = y
+        diagonalSquaresRightDown = []
+        for i in range(ytemp4, 0, -1):
+            xtemp4 += 1
+            ytemp4 -= 1
+            diagonalSquaresRightDown.append([xtemp4, ytemp4])
+        print("\ndiagonal squares/coordinates RIGHT DOWN P can visit:\n" + str(diagonalSquaresRightDown))
+
+        diagonalSquares = diagonalSquaresRightUp + diagonalSquaresLeftDown + diagonalSquaresLeftUp + diagonalSquaresRightDown
         print("\ndiagonal squares/coordinates P can visit:\n" + str(diagonalSquares))
