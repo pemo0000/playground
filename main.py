@@ -24,5 +24,3 @@ board1.print()
 board1.horizontal_squares(x, y)
 board1.vertical_squares(x, y)
 board1.diagonal_squares(x, y)
-
-#test push if automatic github authetification works...
