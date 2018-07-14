@@ -72,17 +72,16 @@ class Board:
         xtemp1 = x
         ytemp1 = y
         diagonalSquaresRightUp = []
-        for i in range(ytemp1, self.boardsize):
-            diagonalSquaresRightUp.append([xtemp1, ytemp1])
+        while xtemp1 < self.boardsize - 1 and ytemp1 < self.boardsize -1:
             xtemp1 += 1
             ytemp1 += 1
-        diagonalSquaresRightUp.pop(0)
+            diagonalSquaresRightUp.append([xtemp1, ytemp1])
         print("\ndiagonal squares/coordinates RIGHT UP P can visit:\n" + str(diagonalSquaresRightUp))
 
         xtemp2 = x
         ytemp2 = y
         diagonalSquaresLeftDown = []
-        for i in range(ytemp2, 0, -1):
+        while xtemp2 > 0 and ytemp2 > 0:
             xtemp2 -= 1
             ytemp2 -= 1
             diagonalSquaresLeftDown.append([xtemp2, ytemp2])
@@ -91,16 +90,16 @@ class Board:
         xtemp3 = x
         ytemp3 = y
         diagonalSquaresLeftUp = []
-        for i in range(ytemp3, self.boardsize):
-            diagonalSquaresLeftUp.append([xtemp3, ytemp3])
+        while xtemp3 > 0 and ytemp3 < self.boardsize - 1:
             xtemp3 -= 1
             ytemp3 += 1
+            diagonalSquaresLeftUp.append([xtemp3, ytemp3])
         print("\ndiagonal squares/coordinates LEFT UP P can visit:\n" + str(diagonalSquaresLeftUp))
 
         xtemp4 = x
         ytemp4 = y
         diagonalSquaresRightDown = []
-        for i in range(ytemp4, 0, -1):
+        while xtemp4 > 0 and ytemp4 > 0:
             xtemp4 += 1
             ytemp4 -= 1
             diagonalSquaresRightDown.append([xtemp4, ytemp4])
