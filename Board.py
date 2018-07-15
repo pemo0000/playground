@@ -99,7 +99,7 @@ class Board:
         xtemp4 = x
         ytemp4 = y
         diagonalSquaresRightDown = []
-        while xtemp4 > 0 and ytemp4 > 0:
+        while (xtemp4 >= 0 and xtemp4 < self.boardsize - 1)  and ytemp4 > 0:
             xtemp4 += 1
             ytemp4 -= 1
             diagonalSquaresRightDown.append([xtemp4, ytemp4])
