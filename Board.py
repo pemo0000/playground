@@ -9,18 +9,18 @@ class Board:
 
     def __init__(self, boardsize):
         """Constructor"""
+        self.boardsize = boardsize
         self.board = []
         self.x = []
         for i in range(0, boardsize):
-            tempboard = []
+            templine = []
             for j in range(0, boardsize):
-                if i & 1 and j & 1 or not i & 1 and not j & 1:
-                    tempboard += ['X']
+                if i & 1 == j & 1:
+                    templine += ['X']
                 else:
-                    tempboard += [' ']
-            self.board += [tempboard]
+                    templine += [' ']
+            self.board += [templine]
             self.x += Board.alphabet[i]
-        self.boardsize = boardsize
 
     def print(self):
         """Prints the board."""
