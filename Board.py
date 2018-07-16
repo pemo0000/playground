@@ -69,40 +69,40 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of diagonal coordinates the piece can visit except its own position
         """
-        xtemp1 = x
-        ytemp1 = y
+        xtemp = x
+        ytemp = y
         diagonalSquaresRightUp = []
-        while xtemp1 < self.boardsize - 1 and ytemp1 < self.boardsize -1:
-            xtemp1 += 1
-            ytemp1 += 1
-            diagonalSquaresRightUp.append([xtemp1, ytemp1])
+        while xtemp < self.boardsize - 1 and ytemp < self.boardsize -1:
+            xtemp += 1
+            ytemp += 1
+            diagonalSquaresRightUp.append([xtemp, ytemp])
         print("\ndiagonal squares/coordinates RIGHT UP P can visit:\n" + str(diagonalSquaresRightUp))
 
-        xtemp2 = x
-        ytemp2 = y
+        xtemp = x
+        ytemp = y
         diagonalSquaresLeftDown = []
-        while xtemp2 > 0 and ytemp2 > 0:
-            xtemp2 -= 1
-            ytemp2 -= 1
-            diagonalSquaresLeftDown.append([xtemp2, ytemp2])
+        while xtemp > 0 and ytemp > 0:
+            xtemp -= 1
+            ytemp -= 1
+            diagonalSquaresLeftDown.append([xtemp, ytemp])
         print("\ndiagonal squares/coordinates LEFT DOWN P can visit:\n" + str(diagonalSquaresLeftDown))
 
-        xtemp3 = x
-        ytemp3 = y
+        xtemp = x
+        ytemp = y
         diagonalSquaresLeftUp = []
-        while xtemp3 > 0 and ytemp3 < self.boardsize - 1:
-            xtemp3 -= 1
-            ytemp3 += 1
-            diagonalSquaresLeftUp.append([xtemp3, ytemp3])
+        while xtemp > 0 and ytemp < self.boardsize - 1:
+            xtemp -= 1
+            ytemp += 1
+            diagonalSquaresLeftUp.append([xtemp, ytemp])
         print("\ndiagonal squares/coordinates LEFT UP P can visit:\n" + str(diagonalSquaresLeftUp))
 
-        xtemp4 = x
-        ytemp4 = y
+        xtemp = x
+        ytemp = y
         diagonalSquaresRightDown = []
-        while (xtemp4 >= 0 and xtemp4 < self.boardsize - 1)  and ytemp4 > 0:
-            xtemp4 += 1
-            ytemp4 -= 1
-            diagonalSquaresRightDown.append([xtemp4, ytemp4])
+        while (xtemp >= 0 and xtemp < self.boardsize - 1)  and ytemp > 0:
+            xtemp += 1
+            ytemp -= 1
+            diagonalSquaresRightDown.append([xtemp, ytemp])
         print("\ndiagonal squares/coordinates RIGHT DOWN P can visit:\n" + str(diagonalSquaresRightDown))
 
         diagonalSquares = diagonalSquaresRightUp + diagonalSquaresLeftDown + diagonalSquaresLeftUp + diagonalSquaresRightDown
