@@ -11,7 +11,6 @@ class Board:
         """Constructor"""
         self.boardsize = boardsize
         self.board = []
-        self.x = []
         for i in range(0, boardsize):
             templine = []
             for j in range(0, boardsize):
@@ -20,7 +19,6 @@ class Board:
                 else:
                     templine += [' ']
             self.board += [templine]
-            self.x += Board.alphabet[i]
 
     def print(self):
         """Prints the board."""
@@ -28,14 +26,45 @@ class Board:
             print(str(i + 1) + "\t", end='')
             print(*self.board[i], sep='')
         print("\t", end='')
-        print(*self.x, sep='')
+        print(string.ascii_lowercase[:self.boardsize])
 
-    def put_piece(self, x, y):
+    def put_piece(self, piece, x, y):
         """Puts a chesspiece on a board.
-        :param x:
-        :param y:
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
         """
-        self.board[y][x] = "P"
+        if piece == "Q":
+            self.board[y][x] = "Q"
+        elif piece == "R":
+            self.board[y][x] = "R"
+        elif piece == "B":
+            self.board[y][x] = "B"
+
+    def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares):
+        """Sets the coordinates a piece can visit
+        :param piece: the piece ([Q]ueen, [R]ook or [B]ishop chosen
+        :param horizontalSquares: a list with lists of horizontal squares a piece can visit
+        :param verticalSquares: a list with lists of vertical squares a piece can visit
+        :param diagonalSquares: a list with list of diagonal squares a piece can visit
+        """
+        if piece == "R":
+            rookSquares = horizontalSquares + verticalSquares
+            for coordinate in rookSquares:
+                x = coordinate[0]
+                y = coordinate[1]
+                self.board[y][x] = "r"
+        elif piece == "B":
+            bishopSquares = diagonalSquares
+            for coordinate in bishopSquares:
+                x = coordinate[0]
+                y = coordinate[1]
+                self.board[y][x] = "b"
+        elif piece == "Q":
+            queenSquares = horizontalSquares + verticalSquares + diagonalSquares
+            for coordinate in queenSquares:
+                x = coordinate[0]
+                y = coordinate[1]
+                self.board[y][x] = "q"
 
     def horizontal_squares(self, x, y):
         """returns a list of horizontal squares/coordinates P can visit except its own position.
@@ -107,3 +136,4 @@ class Board:
 
         diagonalSquares = diagonalSquaresRightUp + diagonalSquaresLeftDown + diagonalSquaresLeftUp + diagonalSquaresRightDown
         print("\ndiagonal squares/coordinates P can visit:\n" + str(diagonalSquares))
+        return diagonalSquares
