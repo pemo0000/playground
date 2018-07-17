@@ -41,10 +41,12 @@ class Board:
             self.board[y][x] = "B"
         elif piece == "K":
             self.board[y][x] = "K"
+        elif piece == "N":
+            self.board[y][x] = "N"
 
-    def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares):
+    def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares):
         """Sets the coordinates a piece can visit
-        :param piece: the piece ([K]ing, [Q]ueen, [R]ook or [B]ishop chosen
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight chosen
         :param horizontalSquares: a list with lists of horizontal squares a piece can visit
         :param verticalSquares: a list with lists of vertical squares a piece can visit
         :param diagonalSquares: a list with list of diagonal squares a piece can visit
@@ -72,6 +74,11 @@ class Board:
                 x = coordinate[0]
                 y = coordinate[1]
                 self.board[y][x] = "k"
+        elif piece == "N":
+            for coordinate in legalKnightSquares:
+                x = coordinate[0]
+                y = coordinate[1]
+                self.board[y][x] = "n"
 
     def horizontal_squares(self, x, y):
         """returns a list of horizontal squares/coordinates P can visit except its own position.
@@ -149,3 +156,15 @@ class Board:
         kingSquares = [(xtemp - 1, ytemp - 1), (xtemp - 1, ytemp), (xtemp -1, ytemp + 1), (xtemp, ytemp - 1), (xtemp, ytemp + 1), (xtemp + 1, ytemp -1), (xtemp + 1, ytemp), (xtemp + 1, ytemp + 1)]
         legalKingSquares = [coordinate for coordinate in kingSquares if coordinate[0] >= 0 and coordinate[1] >=0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize]
         return legalKingSquares
+
+    def knight_squares(self, x, y):
+        """returns a list of squares/coordinates the knight can visit except its own position.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of coordinates the knight can visit except its own position
+        """
+        xtemp = x
+        ytemp = y
+        knightSquares = [(xtemp + 1, ytemp - 2), (xtemp - 1, ytemp -2), (xtemp - 2, ytemp - 1), (xtemp - 2, ytemp + 1), (xtemp - 1, ytemp + 2), (xtemp + 1, ytemp + 2), (xtemp + 2, ytemp + 1), (xtemp + 2, ytemp - 1)]
+        legalKnightSquares = [coordinate for coordinate in knightSquares if coordinate[0] >= 0 and coordinate[1] >=0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize]
+        return legalKnightSquares
