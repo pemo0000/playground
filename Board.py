@@ -154,8 +154,7 @@ class Board:
         xtemp = x
         ytemp = y
         kingSquares = [(xtemp - 1, ytemp - 1), (xtemp - 1, ytemp), (xtemp -1, ytemp + 1), (xtemp, ytemp - 1), (xtemp, ytemp + 1), (xtemp + 1, ytemp -1), (xtemp + 1, ytemp), (xtemp + 1, ytemp + 1)]
-        legalKingSquares = [coordinate for coordinate in kingSquares if coordinate[0] >= 0 and coordinate[1] >=0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize]
-        return legalKingSquares
+        return self.filter_legal_squares(kingSquares)
 
     def knight_squares(self, x, y):
         """returns a list of squares/coordinates the knight can visit except its own position.
@@ -166,5 +165,16 @@ class Board:
         xtemp = x
         ytemp = y
         knightSquares = [(xtemp + 1, ytemp - 2), (xtemp - 1, ytemp -2), (xtemp - 2, ytemp - 1), (xtemp - 2, ytemp + 1), (xtemp - 1, ytemp + 2), (xtemp + 1, ytemp + 2), (xtemp + 2, ytemp + 1), (xtemp + 2, ytemp - 1)]
-        legalKnightSquares = [coordinate for coordinate in knightSquares if coordinate[0] >= 0 and coordinate[1] >=0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize]
-        return legalKnightSquares
+        return self.filter_legal_squares(knightSquares)
+
+    def filter_legal_squares(self, allSquares):
+        """returns a list of "valid" squares/coordinates a piece can visit except its own position.
+        :param squares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
+        :return: a list with lists of valid coordinates - that means coordinates, that are really part of the board.
+        """
+        legalSquares = []
+        for coordinate in allSquares:
+            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
+                legalSquares.append(coordinate)
+        return legalSquares
+
