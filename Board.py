@@ -49,7 +49,7 @@ class Board:
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight chosen
         :param horizontalSquares: a list with lists of horizontal squares a piece can visit
         :param verticalSquares: a list with lists of vertical squares a piece can visit
-        :param diagonalSquares: a list with list of diagonal squares a piece can visit
+        :param diagonalSquares: a list with lists of diagonal squares a piece can visit
         """
         if piece == "R":
             rookSquares = horizontalSquares + verticalSquares
@@ -154,7 +154,7 @@ class Board:
         xtemp = x
         ytemp = y
         kingSquares = [(xtemp - 1, ytemp - 1), (xtemp - 1, ytemp), (xtemp -1, ytemp + 1), (xtemp, ytemp - 1), (xtemp, ytemp + 1), (xtemp + 1, ytemp -1), (xtemp + 1, ytemp), (xtemp + 1, ytemp + 1)]
-        return self.filter_legal_squares(kingSquares)
+        return self.__filter_legal_squares(kingSquares)
 
     def knight_squares(self, x, y):
         """returns a list of squares/coordinates the knight can visit except its own position.
@@ -165,9 +165,9 @@ class Board:
         xtemp = x
         ytemp = y
         knightSquares = [(xtemp + 1, ytemp - 2), (xtemp - 1, ytemp -2), (xtemp - 2, ytemp - 1), (xtemp - 2, ytemp + 1), (xtemp - 1, ytemp + 2), (xtemp + 1, ytemp + 2), (xtemp + 2, ytemp + 1), (xtemp + 2, ytemp - 1)]
-        return self.filter_legal_squares(knightSquares)
+        return self.__filter_legal_squares(knightSquares)
 
-    def filter_legal_squares(self, allSquares):
+    def __filter_legal_squares(self, allSquares):
         """returns a list of "valid" squares/coordinates a piece can visit except its own position.
         :param squares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
         :return: a list with lists of valid coordinates - that means coordinates, that are really part of the board.
