@@ -24,7 +24,13 @@ def check_args():
         sys.exit()
     
     #Are the coordinates in -c legal squares?
+    ##Check if a coordinate is listed more than once
     coordinates = args.coordinates.split(',')
+    if len(coordinates) != len(set(coordinates)):
+        print("You cannot have a coordinate more than once, you can only put one piece on one square. Please try again...")
+        sys.exit()
+
+    ##Check if coordinates are not outside of the board 
     allCoordinates = []
     for i in range(1, args.boardsize + 1):
         for j in range(1, args.boardsize + 1):
