@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import string
+import string, re
 
 class Board:
     """A board is always quadratic. ;-)
@@ -22,7 +22,7 @@ class Board:
             self.board += [templine]
 
     def print(self):
-        """Prints the board."""
+        """Prints the board normal or flipped (180° rotated)."""
         if self.flip == "n" or self.flip == "N":
             for i in range(self.boardsize - 1, -1, -1):
                 print(str(i + 1) + "\t", end='')
@@ -161,6 +161,27 @@ class Board:
         """
         knightSquares = [(x + 1, y - 2), (x - 1, y -2), (x - 2, y - 1), (x - 2, y + 1), (x - 1, y + 2), (x + 1, y + 2), (x + 2, y + 1), (x + 2, y - 1)]
         return self.__filter_legal_squares(knightSquares)
+
+    def try_to_catch_piece(self, piece, horizontalSquares, verticalSquares, coordinateOfPieceToBeCaptured):
+        """checks if a piece can catch/capture another one. 1st draft for rook...
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight chosen
+        :param horizontalSquares: a list with lists of horizontal squares a piece can visit
+        :param verticalSquares: a list with lists of vertical squares a piece can visit
+        :param diagonalSquares: a list with lists of diagonal squares a piece can visit
+        :param coordinateOfPieceToBeCaptured: coordinate of the piece, that might be captured or not
+        """
+        coordinateOfPieceToBeCaptured = [coordinateOfPieceToBeCaptured]
+        if piece == "R":
+            rookSquares = horizontalSquares + verticalSquares
+            convertedCoordinates = []
+            for item in rookSquares:
+                convertedCoordinates += [(Board.alphabet[item[0]] + str(item[1] + 1))]
+            print(convertedCoordinates)
+            print(coordinateOfPieceToBeCaptured)
+        if set(coordinateOfPieceToBeCaptured).issubset(set(convertedCoordinates)):
+            print("Catch!")
+        else:
+            print("No catch!")
 
     def __filter_legal_squares(self, allSquares):
         """returns a list of "valid" squares/coordinates a piece can visit except its own position.

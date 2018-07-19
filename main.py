@@ -40,6 +40,7 @@ def check_args():
             coordinate = Board.alphabet[i - 1] + str(j)
             allCoordinates.append(coordinate)
     if not set(coordinates).issubset(set(allCoordinates)):
+        print(coordinates, allCoordinates)
         print("At least one coordinate is not valid. Please try again...")
         sys.exit()
 
@@ -51,6 +52,8 @@ for item in piecesWithCoordinates:
     items = match.groups()
     x = Board.alphabet.index(items[0])
     y = int(items[1]) - 1
+#try to implement the piece to catch and therefore take 1st piece as the piece to be captured
+coordinateOfPieceToBeCaptured = piecesWithCoordinates[0][1]
 
 #Main stuff...
 check_args()
@@ -59,3 +62,4 @@ horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnig
 board1.put_piece(piece, x, y)
 board1.set_squares(piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares)
 board1.print()
+board1.try_to_catch_piece(piece, horizontalSquares, verticalSquares, coordinateOfPieceToBeCaptured)
