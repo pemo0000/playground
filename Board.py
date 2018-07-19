@@ -7,8 +7,9 @@ class Board:
     """
     alphabet = list(string.ascii_lowercase)
 
-    def __init__(self, boardsize):
+    def __init__(self, boardsize, flip):
         """Constructor"""
+        self.flip = flip
         self.boardsize = boardsize
         self.board = []
         for i in range(0, boardsize):
@@ -22,11 +23,18 @@ class Board:
 
     def print(self):
         """Prints the board."""
-        for i in range(self.boardsize - 1, -1, -1):
-            print(str(i + 1) + "\t", end='')
-            print(*self.board[i], sep='')
-        print("\t", end='')
-        print(string.ascii_lowercase[:self.boardsize])
+        if self.flip == "n" or self.flip == "N":
+            for i in range(self.boardsize - 1, -1, -1):
+                print(str(i + 1) + "\t", end='')
+                print(*self.board[i], sep='')
+            print("\t", end='')
+            print(string.ascii_lowercase[:self.boardsize])
+        elif self.flip == "y" or self.flip == "Y":
+            for i in range(1, self.boardsize + 1):
+                print(str(i) + "\t", end='')
+                print(*self.board[i - 1][::-1], sep='')
+            print("\t", end='')                
+            print(string.ascii_lowercase[:self.boardsize][::-1])
 
     def put_piece(self, piece, x, y):
         """Puts a chesspiece on a board.

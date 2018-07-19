@@ -14,7 +14,10 @@ parser.add_argument("-p", "--pieces",
                     default="Q")
 parser.add_argument("-c", "--coordinates",
                     help="comma separated list of coordinates [e.g. a1,b2,c3,...], where the chesspieces defined with -p are placed on the board.", default="c3")
+parser.add_argument("-f", "--flip",
+                    help="flips the board.", choices=['y','Y','n','N'], default="N")
 args = parser.parse_args()
+flip = args.flip
 
 def check_args():
     """checks and validates command line options"""
@@ -51,7 +54,7 @@ for item in piecesWithCoordinates:
 
 #Main stuff...
 check_args()
-board1 = Board(args.boardsize)
+board1 = Board(args.boardsize, args.flip)
 horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares = board1.horizontal_squares(x, y), board1.vertical_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 board1.put_piece(piece, x, y)
 board1.set_squares(piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares)
