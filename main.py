@@ -42,14 +42,12 @@ def check_args():
 
 #Generate list with tuples of pieces and coordinates and process it for further stuff
 piecesWithCoordinates = list(zip(args.pieces.split(','), args.coordinates.split(',')))
-i = 0
 for item in piecesWithCoordinates:
-    piece = piecesWithCoordinates[i][0]
-    match = re.match(r'([a-z]+)([0-9]+)', piecesWithCoordinates[i][1], re.I)
+    piece = item[0]
+    match = re.match(r'([a-z]+)([0-9]+)', item[1], re.I)
     items = match.groups()
     x = Board.alphabet.index(items[0])
     y = int(items[1]) - 1
-    i += 1
 
 #Main stuff...
 check_args()
