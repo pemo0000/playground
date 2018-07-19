@@ -33,16 +33,7 @@ class Board:
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         """
-        if piece == "Q":
-            self.board[y][x] = "Q"
-        elif piece == "R":
-            self.board[y][x] = "R"
-        elif piece == "B":
-            self.board[y][x] = "B"
-        elif piece == "K":
-            self.board[y][x] = "K"
-        elif piece == "N":
-            self.board[y][x] = "N"
+        self.board[y][x] = piece
 
     def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares):
         """Sets the coordinates a piece can visit
@@ -151,9 +142,7 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of coordinates the king can visit except its own position
         """
-        xtemp = x
-        ytemp = y
-        kingSquares = [(xtemp - 1, ytemp - 1), (xtemp - 1, ytemp), (xtemp -1, ytemp + 1), (xtemp, ytemp - 1), (xtemp, ytemp + 1), (xtemp + 1, ytemp -1), (xtemp + 1, ytemp), (xtemp + 1, ytemp + 1)]
+        kingSquares = [(x - 1, y - 1), (x - 1, y), (x -1, y + 1), (x, y - 1), (x, y + 1), (x + 1, y -1), (x + 1, y), (x + 1, y + 1)]
         return self.__filter_legal_squares(kingSquares)
 
     def knight_squares(self, x, y):
@@ -162,9 +151,7 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of coordinates the knight can visit except its own position
         """
-        xtemp = x
-        ytemp = y
-        knightSquares = [(xtemp + 1, ytemp - 2), (xtemp - 1, ytemp -2), (xtemp - 2, ytemp - 1), (xtemp - 2, ytemp + 1), (xtemp - 1, ytemp + 2), (xtemp + 1, ytemp + 2), (xtemp + 2, ytemp + 1), (xtemp + 2, ytemp - 1)]
+        knightSquares = [(x + 1, y - 2), (x - 1, y -2), (x - 2, y - 1), (x - 2, y + 1), (x - 1, y + 2), (x + 1, y + 2), (x + 2, y + 1), (x + 2, y - 1)]
         return self.__filter_legal_squares(knightSquares)
 
     def __filter_legal_squares(self, allSquares):
