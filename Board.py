@@ -7,7 +7,7 @@ class Board:
     """
     alphabet = list(string.ascii_lowercase)
 
-    def __init__(self, boardsize, flip):
+    def __init__(self, boardsize):
         """Constructor"""
         self.boardsize = boardsize
         self.board = []
