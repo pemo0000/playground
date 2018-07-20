@@ -44,39 +44,28 @@ class Board:
 
     def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares):
         """Sets the coordinates a piece can visit
-        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight chosen
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param horizontalSquares: a list with lists of horizontal squares a piece can visit
         :param verticalSquares: a list with lists of vertical squares a piece can visit
         :param diagonalSquares: a list with lists of diagonal squares a piece can visit
+        :param legalKingSquares: a list with lists of squares the king can visit
+        :param legalKnightSquares: a list with lists of squares the knight can visit
         """
         if piece == "R":
-            rookSquares = horizontalSquares + verticalSquares
-            for coordinate in rookSquares:
-                x = coordinate[0]
-                y = coordinate[1]
-                self.board[y][x] = "r"
+            for coordinate in horizontalSquares + verticalSquares:
+                self.board[coordinate[1]][coordinate[0]] = "r"
         elif piece == "B":
-            bishopSquares = diagonalSquares
-            for coordinate in bishopSquares:
-                x = coordinate[0]
-                y = coordinate[1]
-                self.board[y][x] = "b"
+            for coordinate in diagonalSquares:
+                self.board[coordinate[1]][coordinate[0]] = "b"
         elif piece == "Q":
-            queenSquares = horizontalSquares + verticalSquares + diagonalSquares
-            for coordinate in queenSquares:
-                x = coordinate[0]
-                y = coordinate[1]
-                self.board[y][x] = "q"
+            for coordinate in horizontalSquares + verticalSquares + diagonalSquares:
+                self.board[coordinate[1]][coordinate[0]] = "q"
         elif piece == "K":
             for coordinate in legalKingSquares:
-                x = coordinate[0]
-                y = coordinate[1]
-                self.board[y][x] = "k"
+                self.board[coordinate[1]][coordinate[0]] = "k"
         elif piece == "N":
             for coordinate in legalKnightSquares:
-                x = coordinate[0]
-                y = coordinate[1]
-                self.board[y][x] = "n"
+                self.board[coordinate[1]][coordinate[0]] = "n"
 
     def horizontal_squares(self, x, y):
         """returns a list of horizontal squares/coordinates P can visit except its own position.
@@ -161,23 +150,19 @@ class Board:
         knightSquares = [(x + 1, y - 2), (x - 1, y -2), (x - 2, y - 1), (x - 2, y + 1), (x - 1, y + 2), (x + 1, y + 2), (x + 2, y + 1), (x + 2, y - 1)]
         return self.__filter_legal_squares(knightSquares)
 
-    def try_to_catch_piece(self, piece, horizontalSquares, verticalSquares, coordinateOfPieceToBeCaptured):
+    def try_to_catch_piece(self, coordinateOfPieceToBeCaptured, squares):
         """checks if a piece can catch/capture another one. 1st draft for rook...
-        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight chosen
-        :param horizontalSquares: a list with lists of horizontal squares a piece can visit
-        :param verticalSquares: a list with lists of vertical squares a piece can visit
-        :param diagonalSquares: a list with lists of diagonal squares a piece can visit
-        :param coordinateOfPieceToBeCaptured: coordinate of the piece, that might be captured or not
+        :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
+        :param squares: a list with lists of coordinates the piece, that might capture another piece, can visit
         """
-        coordinateOfPieceToBeCaptured = [coordinateOfPieceToBeCaptured]
-        if piece == "R":
-            rookSquares = horizontalSquares + verticalSquares
-            convertedCoordinates = []
-            for item in rookSquares:
-                convertedCoordinates += [(Board.alphabet[item[0]] + str(item[1] + 1))]
-            print(convertedCoordinates)
-            print(coordinateOfPieceToBeCaptured)
-        if set(coordinateOfPieceToBeCaptured).issubset(set(convertedCoordinates)):
+        match = re.match(r'([a-z]+)([0-9]+)', coordinateOfPieceToBeCaptured, re.I)
+        items = match.groups()
+        letter = Board.alphabet.index(items[0])
+        convertedCoordinate = []
+        convertedCoordinate += [(letter), int(items[1]) - 1]
+        print(convertedCoordinate)
+        print(squares)
+        if convertedCoordinate in squares:
             print("Catch!")
         else:
             print("No catch!")

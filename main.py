@@ -59,7 +59,17 @@ coordinateOfPieceToBeCaptured = piecesWithCoordinates[0][1]
 check_args()
 board1 = Board(args.boardsize)
 horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares = board1.horizontal_squares(x, y), board1.vertical_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
+print(diagonalSquares, legalKingSquares)
 board1.put_piece(piece, x, y)
 board1.set_squares(piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares)
 board1.print(flip)
-board1.try_to_catch_piece(piece, horizontalSquares, verticalSquares, coordinateOfPieceToBeCaptured)
+if piece == "R":
+    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares)
+elif piece == "Q":
+    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares + diagonalSquares)
+elif piece == "B":
+    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, diagonalSquares)
+elif piece == "K":
+    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, legalKingSquares)
+elif piece == "N":
+    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, legalKnightSquares)
