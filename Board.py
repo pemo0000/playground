@@ -138,11 +138,7 @@ class Board:
         :return: a list with lists of coordinates the king can visit except its own position
         """
         allKingSquares = [[x - 1, y - 1], [x - 1, y], [x -1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y -1], [x + 1, y], [x + 1, y + 1]]
-        kingSquares =[]
-        for coordinate in allKingSquares:
-            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
-                kingSquares.append(coordinate)
-        return kingSquares
+        return self.__filter_legal_squares(allKingSquares)
 
     def knight_squares(self, x, y):
         """returns a list of squares/coordinates the knight can visit except its own position.
@@ -151,16 +147,24 @@ class Board:
         :return: a list with lists of coordinates the knight can visit except its own position
         """
         allKnightSquares = [[x + 1, y - 2], [x - 1, y -2], [x - 2, y - 1], [x - 2, y + 1], [x - 1, y + 2], [x + 1, y + 2], [x + 2, y + 1], [x + 2, y - 1]]
-        knightSquares =[]
-        for coordinate in allKnightSquares:
+        return self.__filter_legal_squares(allKnightSquares)
+
+    def __filter_legal_squares(self, allSquares):
+        """returns a list of "valid" squares/coordinates a piece can visit except its own position.
+        :param squares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
+        :return: a list with lists of valid coordinates - that means coordinates, that are really part of the board.
+        """
+        legalSquares = []
+        for coordinate in allSquares:
             if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
-                knightSquares.append(coordinate)
-        return knightSquares
+                legalSquares.append(coordinate)
+        return legalSquares
 
     def try_to_catch_piece(self, coordinateOfPieceToBeCaptured, squares):
-        """checks if a piece can catch/capture another one. 1st draft for rook...
+        """checks if a piece can catch/capture another one.
         :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         :param squares: a list with lists of coordinates the piece, that might capture another piece, can visit
+        :return: True in case of a catch, False if no catch is possible
         """
         match = re.match(r'([a-z]+)([0-9]+)', coordinateOfPieceToBeCaptured, re.I)
         items = match.groups()
