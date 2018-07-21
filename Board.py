@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import string, re
 
 class Board:
@@ -21,7 +20,7 @@ class Board:
             self.board += [templine]
 
     def print(self, flip):
-        """Prints the board normal or flipped (180° rotated)."""
+        """Prints the board normal or flipped (180° rotated), if the script is called with -f."""
         if flip:
             for i in range(0, self.boardsize):
                 print(str(i + 1) + "\t", end='')
@@ -42,14 +41,14 @@ class Board:
         """
         self.board[y][x] = piece
 
-    def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares):
+    def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param horizontalSquares: a list with lists of horizontal squares a piece can visit
         :param verticalSquares: a list with lists of vertical squares a piece can visit
         :param diagonalSquares: a list with lists of diagonal squares a piece can visit
-        :param legalKingSquares: a list with lists of squares the king can visit
-        :param legalKnightSquares: a list with lists of squares the knight can visit
+        :param kingSquares: a list with lists of squares the king can visit
+        :param knightSquares: a list with lists of squares the knight can visit
         """
         if piece == "R":
             for coordinate in horizontalSquares + verticalSquares:
@@ -61,10 +60,10 @@ class Board:
             for coordinate in horizontalSquares + verticalSquares + diagonalSquares:
                 self.board[coordinate[1]][coordinate[0]] = "q"
         elif piece == "K":
-            for coordinate in legalKingSquares:
+            for coordinate in kingSquares:
                 self.board[coordinate[1]][coordinate[0]] = "k"
         elif piece == "N":
-            for coordinate in legalKnightSquares:
+            for coordinate in knightSquares:
                 self.board[coordinate[1]][coordinate[0]] = "n"
 
     def horizontal_squares(self, x, y):
@@ -138,8 +137,12 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of coordinates the king can visit except its own position
         """
-        kingSquares = [(x - 1, y - 1), (x - 1, y), (x -1, y + 1), (x, y - 1), (x, y + 1), (x + 1, y -1), (x + 1, y), (x + 1, y + 1)]
-        return self.__filter_legal_squares(kingSquares)
+        allKingSquares = [[x - 1, y - 1], [x - 1, y], [x -1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y -1], [x + 1, y], [x + 1, y + 1]]
+        kingSquares =[]
+        for coordinate in allKingSquares:
+            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
+                kingSquares.append(coordinate)
+        return kingSquares
 
     def knight_squares(self, x, y):
         """returns a list of squares/coordinates the knight can visit except its own position.
@@ -147,8 +150,12 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of coordinates the knight can visit except its own position
         """
-        knightSquares = [(x + 1, y - 2), (x - 1, y -2), (x - 2, y - 1), (x - 2, y + 1), (x - 1, y + 2), (x + 1, y + 2), (x + 2, y + 1), (x + 2, y - 1)]
-        return self.__filter_legal_squares(knightSquares)
+        allKnightSquares = [[x + 1, y - 2], [x - 1, y -2], [x - 2, y - 1], [x - 2, y + 1], [x - 1, y + 2], [x + 1, y + 2], [x + 2, y + 1], [x + 2, y - 1]]
+        knightSquares =[]
+        for coordinate in allKnightSquares:
+            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
+                knightSquares.append(coordinate)
+        return knightSquares
 
     def try_to_catch_piece(self, coordinateOfPieceToBeCaptured, squares):
         """checks if a piece can catch/capture another one. 1st draft for rook...
@@ -160,21 +167,7 @@ class Board:
         letter = Board.alphabet.index(items[0])
         convertedCoordinate = []
         convertedCoordinate += [(letter), int(items[1]) - 1]
-        print(convertedCoordinate)
-        print(squares)
         if convertedCoordinate in squares:
-            print("Catch!")
+            return True
         else:
-            print("No catch!")
-
-    def __filter_legal_squares(self, allSquares):
-        """returns a list of "valid" squares/coordinates a piece can visit except its own position.
-        :param squares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
-        :return: a list with lists of valid coordinates - that means coordinates, that are really part of the board.
-        """
-        legalSquares = []
-        for coordinate in allSquares:
-            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
-                legalSquares.append(coordinate)
-        return legalSquares
-
+            return False

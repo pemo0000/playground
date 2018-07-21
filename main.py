@@ -17,7 +17,6 @@ parser.add_argument("-c", "--coordinates",
 parser.add_argument("-f", "--flip",
                     help="flips the board.", action="store_true")
 args = parser.parse_args()
-flip = args.flip
 
 def check_args():
     """checks and validates command line options"""
@@ -58,18 +57,32 @@ coordinateOfPieceToBeCaptured = piecesWithCoordinates[0][1]
 #Main stuff...
 check_args()
 board1 = Board(args.boardsize)
-horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares = board1.horizontal_squares(x, y), board1.vertical_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
-print(diagonalSquares, legalKingSquares)
+horizontalSquares, verticalSquares, diagonalSquares, kingSquares, knightSquares = board1.horizontal_squares(x, y), board1.vertical_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 board1.put_piece(piece, x, y)
-board1.set_squares(piece, horizontalSquares, verticalSquares, diagonalSquares, legalKingSquares, legalKnightSquares)
-board1.print(flip)
+board1.set_squares(piece, horizontalSquares, verticalSquares, diagonalSquares, kingSquares, knightSquares)
+board1.print(args.flip)
 if piece == "R":
-    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares)
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares):
+        print("Catch!")
+    else:
+        print("No catch!")
 elif piece == "Q":
-    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares + diagonalSquares)
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares + diagonalSquares):
+        print("Catch!")
+    else:
+        print("No catch!")
 elif piece == "B":
-    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, diagonalSquares)
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, diagonalSquares):
+        print("Catch!")
+    else:
+        print("No catch!")
 elif piece == "K":
-    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, legalKingSquares)
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, kingSquares):
+        print("Catch!")
+    else:
+        print("No catch!")
 elif piece == "N":
-    board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, legalKnightSquares)
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, knightSquares):
+        print("Catch!")
+    else:
+        print("No catch!")
