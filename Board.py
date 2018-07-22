@@ -1,4 +1,6 @@
-import string, re
+import string
+import re
+
 
 class Board:
     """A board is always quadratic. ;-)
@@ -20,12 +22,14 @@ class Board:
             self.board += [templine]
 
     def print(self, flip):
-        """Prints the board normal or flipped (180° rotated), if the script is called with -f."""
+        """Prints the board normal or flipped (180° rotated), if the script is called with -f.
+        :param flip: flips = True flips the board (rotates it by 180°)
+        """
         if flip:
             for i in range(0, self.boardsize):
                 print(str(i + 1) + "\t", end='')
                 print(*self.board[i][::-1], sep='')
-            print("\t", end='')                
+            print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize][::-1])
         else:
             for i in range(self.boardsize - 1, -1, -1):
@@ -36,6 +40,7 @@ class Board:
 
     def put_piece(self, piece, x, y):
         """Puts a chesspiece on a board.
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         """
@@ -99,7 +104,7 @@ class Board:
         xtemp = x
         ytemp = y
         diagonalSquaresRightUp = []
-        while xtemp < self.boardsize - 1 and ytemp < self.boardsize -1:
+        while xtemp < self.boardsize - 1 and ytemp < self.boardsize - 1:
             xtemp += 1
             ytemp += 1
             diagonalSquaresRightUp.append([xtemp, ytemp])
@@ -123,7 +128,7 @@ class Board:
         xtemp = x
         ytemp = y
         diagonalSquaresRightDown = []
-        while (xtemp >= 0 and xtemp < self.boardsize - 1)  and ytemp > 0:
+        while (0 <= xtemp < self.boardsize - 1) and ytemp > 0:
             xtemp += 1
             ytemp -= 1
             diagonalSquaresRightDown.append([xtemp, ytemp])
@@ -137,7 +142,8 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of coordinates the king can visit except its own position
         """
-        allKingSquares = [[x - 1, y - 1], [x - 1, y], [x -1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y -1], [x + 1, y], [x + 1, y + 1]]
+        allKingSquares = [[x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y - 1],
+                          [x + 1, y], [x + 1, y + 1]]
         return self.__filter_legal_squares(allKingSquares)
 
     def knight_squares(self, x, y):
@@ -146,21 +152,23 @@ class Board:
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists of coordinates the knight can visit except its own position
         """
-        allKnightSquares = [[x + 1, y - 2], [x - 1, y -2], [x - 2, y - 1], [x - 2, y + 1], [x - 1, y + 2], [x + 1, y + 2], [x + 2, y + 1], [x + 2, y - 1]]
+        allKnightSquares = [[x + 1, y - 2], [x - 1, y - 2], [x - 2, y - 1], [x - 2, y + 1], [x - 1, y + 2],
+                            [x + 1, y + 2], [x + 2, y + 1], [x + 2, y - 1]]
         return self.__filter_legal_squares(allKnightSquares)
 
     def __filter_legal_squares(self, allSquares):
         """returns a list of "valid" squares/coordinates a piece can visit except its own position.
-        :param squares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
+        :param allSquares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
         :return: a list with lists of valid coordinates - that means coordinates, that are really part of the board.
         """
         legalSquares = []
         for coordinate in allSquares:
-            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
+            if coordinate[0] >= 0 and self.boardsize > 0 <= coordinate[1] < self.boardsize:
                 legalSquares.append(coordinate)
         return legalSquares
 
-    def try_to_catch_piece(self, coordinateOfPieceToBeCaptured, squares):
+    @staticmethod
+    def try_to_catch_piece(coordinateOfPieceToBeCaptured, squares):
         """checks if a piece can catch/capture another one.
         :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         :param squares: a list with lists of coordinates the piece, that might capture another piece, can visit
@@ -170,7 +178,7 @@ class Board:
         items = match.groups()
         letter = Board.alphabet.index(items[0])
         convertedCoordinate = []
-        convertedCoordinate += [(letter), int(items[1]) - 1]
+        convertedCoordinate += [letter, int(items[1]) - 1]
         if convertedCoordinate in squares:
             return True
         else:
