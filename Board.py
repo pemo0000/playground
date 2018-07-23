@@ -187,7 +187,4 @@ class Board:
         letter = Board.alphabet.index(items[0])
         convertedCoordinate = []
         convertedCoordinate += [letter, int(items[1]) - 1]
-        if convertedCoordinate in squares:
-            return True
-        else:
-            return False
+        return convertedCoordinate in squares

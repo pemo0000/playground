@@ -68,28 +68,11 @@ rookSquares, diagonalSquares, kingSquares, knightSquares = board1.rook_squares(x
 board1.put_piece(piece, x, y)
 board1.set_squares(piece, rookSquares, diagonalSquares, kingSquares, knightSquares)
 board1.print(args.flip)
-if piece == "R":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares):
+if  piece == "R" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
+    piece == "Q" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + diagonalSquares) or\
+    piece == "B" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, diagonalSquares)               or\
+    piece == "K" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, kingSquares)                   or\
+    piece == "N" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, knightSquares):
         print("Catch!")
-    else:
-        print("No catch!")
-elif piece == "Q":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + diagonalSquares):
-        print("Catch!")
-    else:
-        print("No catch!")
-elif piece == "B":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, diagonalSquares):
-        print("Catch!")
-    else:
-        print("No catch!")
-elif piece == "K":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, kingSquares):
-        print("Catch!")
-    else:
-        print("No catch!")
-elif piece == "N":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, knightSquares):
-        print("Catch!")
-    else:
+else:
         print("No catch!")
