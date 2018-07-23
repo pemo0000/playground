@@ -46,7 +46,7 @@ class Board:
         """
         self.board[y][x] = piece
 
-    def set_squares(self, piece, horizontalSquares, verticalSquares, diagonalSquares, kingSquares, knightSquares):
+    def set_squares(self, piece, rookSquares, diagonalSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param horizontalSquares: a list with lists of horizontal squares a piece can visit
@@ -71,7 +71,7 @@ class Board:
             for coordinate in knightSquares:
                 self.board[coordinate[1]][coordinate[0]] = "n"
 
-    def horizontal_squares(self, x, y):
+    def __horizontal_squares(self, x, y):
         """returns a list of horizontal squares/coordinates P can visit except its own position.
         :param x: x coordinate where the piece is put, beginning at 0
         :param y: y coordinate where the piece is put, beginning at 0
@@ -83,7 +83,7 @@ class Board:
         del horizontalSquares[x]
         return horizontalSquares
 
-    def vertical_squares(self, x, y):
+    def __vertical_squares(self, x, y):
         """returns a list of vertical squares/coordinates P can visit except its own position.
         :param x: x coordinate where the piece is put, beginning at 0
         :param y: y coordinate where the piece is put, beginning at 0
@@ -94,6 +94,14 @@ class Board:
             verticalSquares.append([x, i])
         del verticalSquares[y]
         return verticalSquares
+    
+    def rook_squares(self, x, y):
+        """returns a list of vertical squares/coordinates P can visit except its own position.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists coordinates the rook can visit except its own position
+        """
+        return self.__horizontal_squares(x, y) + self.__vertical_squares(x, y)
 
     def diagonal_squares(self, x, y):
         """returns a list of diagonal squares/coordinates P can visit except its own position.

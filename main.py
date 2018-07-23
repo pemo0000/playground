@@ -64,17 +64,17 @@ coordinateOfPieceToBeCaptured = args.target
 # Main stuff...
 check_args()
 board1 = Board(args.boardsize)
-horizontalSquares, verticalSquares, diagonalSquares, kingSquares, knightSquares = board1.horizontal_squares(x, y), board1.vertical_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
+rookSquares, diagonalSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 board1.put_piece(piece, x, y)
-board1.set_squares(piece, horizontalSquares, verticalSquares, diagonalSquares, kingSquares, knightSquares)
+board1.set_squares(piece, rookSquares, diagonalSquares, kingSquares, knightSquares)
 board1.print(args.flip)
 if piece == "R":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares):
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares):
         print("Catch!")
     else:
         print("No catch!")
 elif piece == "Q":
-    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, horizontalSquares + verticalSquares + diagonalSquares):
+    if board1.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + diagonalSquares):
         print("Catch!")
     else:
         print("No catch!")
