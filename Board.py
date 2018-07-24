@@ -8,6 +8,8 @@ class Board:
     Biggest board is 26x26.
     """
     alphabet = list(string.ascii_lowercase)
+    windowSize = 50
+    rectangleSize = 10
 
     def __init__(self, boardsize):
         """Constructor"""
@@ -22,8 +24,11 @@ class Board:
                     templine += [' ']
             self.board += [templine]
 
-    def print(self, flip):
+    def print(self, piece, x, y, flip):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
         :param flip: flips = True flips the board (rotates it by 180°)
         """
         if flip:
@@ -38,13 +43,6 @@ class Board:
                 print(*self.board[i], sep='')
             print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize])
-
-    def put_piece(self, piece, x, y):
-        """Puts a chesspiece on a board.
-        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
-        :param x: x postion of the piece to put on the board
-        :param y: y postion of the piece to put on the board
-        """
         self.board[y][x] = piece
 
     def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
@@ -194,31 +192,26 @@ class Board:
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         """
-        win = GraphWin(width=self.boardsize * 50, height=self.boardsize * 50)
-        win.setCoords(0, 0, self.boardsize * 10 + 2, self.boardsize * 10 + 2)
+        win = GraphWin(width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
+        win.setCoords(0, 0, self.boardsize * self.rectangleSize + 2, self.boardsize * self.rectangleSize + 2)
         y1 = 1
         y2 = 11
         for i in range(0, self.boardsize):
             x1 = 1
             x2 = 11
             for j in range(0, self.boardsize):
+                square = Rectangle(Point(x1, y1), Point(x2, y2))
+                x1 += self.rectangleSize 
+                x2 += self.rectangleSize 
                 if i & 1 == j & 1:
-                    square = Rectangle(Point(x1, y1), Point(x2, y2))
                     square.setFill("black")
-                    x1 += 10 
-                    x2 += 10 
-                    square.draw(win)
-                else:
-                    square = Rectangle(Point(x1, y1), Point(x2, y2))
-                    x1 += 10
-                    x2 += 10
-                    square.draw(win)
-            y1 += 10
-            y2 += 10
-        square = self.convert_coordinate_to_rectangle(x, y)
+                square.draw(win)
+            y1 += self.rectangleSize
+            y2 += self.rectangleSize
+        square = Board.convert_coordinate_to_rectangle(x, y)
         square.setFill("red")
         square.draw(win)
-        label = self.create_and_customize_label(piece, x, y)
+        label = Board.create_and_customize_label(piece, x, y)
         label.draw(win)
         win.getMouse()
 
@@ -229,18 +222,29 @@ class Board:
         :param y: y postion of the piece to put on the board
         :return: a rectangle
         """
-        return Rectangle(Point((x * 10) + 1, (y * 10) + 1), Point((x * 10) + 11, (y * 10) + 11))
+        return Rectangle(Point((x * Board.rectangleSize) + 1, (y * Board.rectangleSize) + 1), Point((x * Board.rectangleSize) + 11, (y * Board.rectangleSize) + 11))
 
     @staticmethod
     def create_and_customize_label(piece, x, y):
-        """creates and customizes the lable for the piece to be placed on the board
+        """Creates and customizes the lable for the piece to be placed on the board
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         :return: a label
         """
-        label = Text(Point((x * 10) + 6, (y * 10) + 6), piece)
+        label = Text(Point((x * Board.rectangleSize) + 6, (y * Board.rectangleSize) + 6), piece)
         label.setSize(16)
         label.setStyle("bold")
         label.setFill("blue")
         return label
+
+    def do_something_with_fen(self, fen):
+        print(fen)
+        fenWoSlashes = fen.replace("/", "")
+        print(fenWoSlashes)
+        for element in fenWoSlashes:
+            if element.isdigit:
+                print(element + " is digit")
+            else:
+                print("no digit")
+

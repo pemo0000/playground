@@ -21,8 +21,9 @@ parser.add_argument("-f", "--flip",
                     help="flips the board.", action="store_true")
 parser.add_argument("-t", "--target",
                     help="coordinate of the piece in question to be captured or not..", default="b2")
+parser.add_argument("-z", "--fen",
+                    help="FEN notation of a position of an 8x8 board. E.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2")
 args = parser.parse_args()
-
 
 def check_args():
     """checks and validates command line options"""
@@ -58,16 +59,16 @@ for item in piecesWithCoordinates:
     items = match.groups()
     x = Board.alphabet.index(items[0])
     y = int(items[1]) - 1
-# try to implement the piece to catch and therefore take 1st piece as the piece to be captured
+
 coordinateOfPieceToBeCaptured = args.target
+fen = args.fen
 
 # Main stuff...
 check_args()
 board1 = Board(args.boardsize)
 rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
-board1.put_piece(piece, x, y)
 board1.set_squares(piece, rookSquares, bishopSquares, kingSquares, knightSquares)
-board1.print(args.flip)
+board1.print(piece, x, y, args.flip)
 if  piece == "R" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
     piece == "Q" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + bishopSquares)   or\
     piece == "B" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, bishopSquares)                 or\
@@ -76,4 +77,5 @@ if  piece == "R" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, roo
         print("Catch!")
 else:
         print("No catch!")
+board1.do_something_with_fen(fen)
 board1.draw(piece, x, y)
