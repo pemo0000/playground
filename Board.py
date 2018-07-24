@@ -215,13 +215,32 @@ class Board:
                     square.draw(win)
             y1 += 10
             y2 += 10
-        square = Rectangle(Point((x * 10) + 1, (y * 10) + 1), Point((x * 10) + 11, (y * 10) + 11))
+        square = self.convert_coordinate_to_rectangle(x, y)
         square.setFill("red")
         square.draw(win)
+        label = self.create_and_customize_label(piece, x, y)
+        label.draw(win)
+        win.getMouse()
+
+    @staticmethod
+    def convert_coordinate_to_rectangle(x, y):
+        """Converts a coordinate to a rectangle
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
+        :return: a rectangle
+        """
+        return Rectangle(Point((x * 10) + 1, (y * 10) + 1), Point((x * 10) + 11, (y * 10) + 11))
+
+    @staticmethod
+    def create_and_customize_label(piece, x, y):
+        """creates and customizes the lable for the piece to be placed on the board
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
+        :return: a label
+        """
         label = Text(Point((x * 10) + 6, (y * 10) + 6), piece)
         label.setSize(16)
         label.setStyle("bold")
         label.setFill("blue")
-        label.draw(win)
-        
-        win.getMouse()
+        return label
