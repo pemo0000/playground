@@ -1,5 +1,6 @@
 import string
 import re
+from graphics import *
 
 
 class Board:
@@ -46,23 +47,22 @@ class Board:
         """
         self.board[y][x] = piece
 
-    def set_squares(self, piece, rookSquares, diagonalSquares, kingSquares, knightSquares):
+    def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
-        :param horizontalSquares: a list with lists of horizontal squares a piece can visit
-        :param verticalSquares: a list with lists of vertical squares a piece can visit
-        :param diagonalSquares: a list with lists of diagonal squares a piece can visit
+        :param rookSquares: a list with lists of squares the rook can visit
+        :param bishopSquares: a list with lists of squares the bishop can visit
         :param kingSquares: a list with lists of squares the king can visit
         :param knightSquares: a list with lists of squares the knight can visit
         """
         if piece == "R":
-            for coordinate in horizontalSquares + verticalSquares:
+            for coordinate in rookSquares:
                 self.board[coordinate[1]][coordinate[0]] = "r"
         elif piece == "B":
-            for coordinate in diagonalSquares:
+            for coordinate in bishopSquares:
                 self.board[coordinate[1]][coordinate[0]] = "b"
         elif piece == "Q":
-            for coordinate in horizontalSquares + verticalSquares + diagonalSquares:
+            for coordinate in rookSquares + bishopSquares:
                 self.board[coordinate[1]][coordinate[0]] = "q"
         elif piece == "K":
             for coordinate in kingSquares:
@@ -96,18 +96,18 @@ class Board:
         return verticalSquares
     
     def rook_squares(self, x, y):
-        """returns a list of vertical squares/coordinates P can visit except its own position.
+        """returns a list of squares/coordinates  the rook can visit except its own position.
         :param x: x coordinate where the piece is put, beginning at 0
         :param y: y coordinate where the piece is put, beginning at 0
         :return: a list with lists coordinates the rook can visit except its own position
         """
         return self.__horizontal_squares(x, y) + self.__vertical_squares(x, y)
 
-    def diagonal_squares(self, x, y):
-        """returns a list of diagonal squares/coordinates P can visit except its own position.
+    def bishop_squares(self, x, y):
+        """returns a list of squares/coordinates the bishop can visit except its own position.
         :param x: x coordinate where the piece is put, beginning at 0
         :param y: y coordinate where the piece is put, beginning at 0
-        :return: a list with lists of diagonal coordinates the piece can visit except its own position
+        :return: a list with lists of coordinates the the bishop can visit except its own position
         """
         xtemp = x
         ytemp = y
@@ -141,8 +141,7 @@ class Board:
             ytemp -= 1
             diagonalSquaresRightDown.append([xtemp, ytemp])
 
-        diagonalSquares = diagonalSquaresRightUp + diagonalSquaresLeftDown + diagonalSquaresLeftUp + diagonalSquaresRightDown
-        return diagonalSquares
+        return diagonalSquaresRightUp + diagonalSquaresLeftDown + diagonalSquaresLeftUp + diagonalSquaresRightDown
 
     def king_squares(self, x, y):
         """returns a list of squares/coordinates the king  can visit except its own position.
@@ -188,3 +187,41 @@ class Board:
         convertedCoordinate = []
         convertedCoordinate += [letter, int(items[1]) - 1]
         return convertedCoordinate in squares
+
+    def draw(self, piece, x, y):
+        """Draws a graphical board.
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
+        """
+        win = GraphWin(width=self.boardsize * 50, height=self.boardsize * 50)
+        win.setCoords(0, 0, self.boardsize * 10 + 2, self.boardsize * 10 + 2)
+        y1 = 1
+        y2 = 11
+        for i in range(0, self.boardsize):
+            x1 = 1
+            x2 = 11
+            for j in range(0, self.boardsize):
+                if i & 1 == j & 1:
+                    square = Rectangle(Point(x1, y1), Point(x2, y2))
+                    square.setFill("black")
+                    x1 += 10 
+                    x2 += 10 
+                    square.draw(win)
+                else:
+                    square = Rectangle(Point(x1, y1), Point(x2, y2))
+                    x1 += 10
+                    x2 += 10
+                    square.draw(win)
+            y1 += 10
+            y2 += 10
+        square = Rectangle(Point((x * 10) + 1, (y * 10) + 1), Point((x * 10) + 11, (y * 10) + 11))
+        square.setFill("red")
+        square.draw(win)
+        label = Text(Point((x * 10) + 6, (y * 10) + 6), piece)
+        label.setSize(16)
+        label.setStyle("bold")
+        label.setFill("blue")
+        label.draw(win)
+        
+        win.getMouse()

@@ -64,15 +64,16 @@ coordinateOfPieceToBeCaptured = args.target
 # Main stuff...
 check_args()
 board1 = Board(args.boardsize)
-rookSquares, diagonalSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.diagonal_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
+rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 board1.put_piece(piece, x, y)
-board1.set_squares(piece, rookSquares, diagonalSquares, kingSquares, knightSquares)
+board1.set_squares(piece, rookSquares, bishopSquares, kingSquares, knightSquares)
 board1.print(args.flip)
 if  piece == "R" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
-    piece == "Q" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + diagonalSquares) or\
-    piece == "B" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, diagonalSquares)               or\
+    piece == "Q" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + bishopSquares)   or\
+    piece == "B" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, bishopSquares)                 or\
     piece == "K" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, kingSquares)                   or\
     piece == "N" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, knightSquares):
         print("Catch!")
 else:
         print("No catch!")
+board1.draw(piece, x, y)
