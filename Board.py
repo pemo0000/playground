@@ -10,6 +10,10 @@ class Board:
     alphabet = list(string.ascii_lowercase)
     windowSize = 50
     rectangleSize = 10
+    boardMargin = 2
+    rectangleHomeSquareColor = "red"
+    rectangleTargetSquareColor = "orange"
+    rectangleFillColorDarkSquares = "black"
 
     def __init__(self, boardsize):
         """Constructor"""
@@ -31,6 +35,7 @@ class Board:
         :param y: y postion of the piece to put on the board
         :param flip: flips = True flips the board (rotates it by 180°)
         """
+        self.board[y][x] = piece
         if flip:
             for i in range(0, self.boardsize):
                 print(str(i + 1) + "\t", end='')
@@ -43,7 +48,6 @@ class Board:
                 print(*self.board[i], sep='')
             print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize])
-        self.board[y][x] = piece
 
     def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
@@ -186,14 +190,18 @@ class Board:
         convertedCoordinate += [letter, int(items[1]) - 1]
         return convertedCoordinate in squares
 
-    def draw(self, piece, x, y):
+    def draw(self, piece, x, y, rookSquares, bishopSquares, kingSquares, knightSquares):
         """Draws a graphical board.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
+        :param rookSquares: a list with lists of squares the rook can visit
+        :param bishopSquares: a list with lists of squares the bishop can visit
+        :param kingSquares: a list with lists of squares the king can visit
+        :param knightSquares: a list with lists of squares the knight can visit
         """
         win = GraphWin(width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
-        win.setCoords(0, 0, self.boardsize * self.rectangleSize + 2, self.boardsize * self.rectangleSize + 2)
+        win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
         y1 = 1
         y2 = 11
         for i in range(0, self.boardsize):
@@ -204,16 +212,38 @@ class Board:
                 x1 += self.rectangleSize 
                 x2 += self.rectangleSize 
                 if i & 1 == j & 1:
-                    square.setFill("black")
+                    square.setFill(self.rectangleFillColorDarkSquares)
                 square.draw(win)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
         square = Board.convert_coordinate_to_rectangle(x, y)
-        square.setFill("red")
+        square.setFill(self.rectangleHomeSquareColor)
         square.draw(win)
         label = Board.create_and_customize_label(piece, x, y)
         label.draw(win)
+        if piece == "K":
+            Board.set_target_rectangles(self, win, kingSquares)
+        elif piece == "Q":
+            Board.set_target_rectangles(self, win, rookSquares + bishopSquares)
+        elif piece == "R":
+            Board.set_target_rectangles(self, win, rookSquares)
+        elif piece == "B":
+            Board.set_target_rectangles(self, win, bishopSquares)
+        elif piece == "N":
+            Board.set_target_rectangles(self, win, knightSquares)
         win.getMouse()
+
+    def set_target_rectangles(self, win, targetSquares):
+        """creates the rectangles for the graphical board - the squares a piece can visit except its own location
+        :param win: window object representing graphicalBoard
+        :param targetSquares: a list with lists of coordinates for which the rectangles are set - the squares a piece can visit except its own location
+        """
+        for coordinate in targetSquares:  # type: object
+            x = coordinate[0]
+            y = coordinate[1]
+            square = Board.convert_coordinate_to_rectangle(x, y)
+            square.setFill(self.rectangleTargetSquareColor)
+            square.draw(win)
 
     @staticmethod
     def convert_coordinate_to_rectangle(x, y):
@@ -239,12 +269,15 @@ class Board:
         return label
 
     def do_something_with_fen(self, fen):
+        """Is doing something with a FEN (Forsyth-Edwards-Notation) string
+        :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2
+        """
         print(fen)
         fenWoSlashes = fen.replace("/", "")
         print(fenWoSlashes)
-        for element in fenWoSlashes:
-            if element.isdigit:
-                print(element + " is digit")
-            else:
-                print("no digit")
+        # for element in fenWoSlashes:
+        #     if element.isdigit():
+        #         print(element + " is digit")
+        #     else:
+        #         print("no digit")
 
