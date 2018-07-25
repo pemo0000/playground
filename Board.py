@@ -222,25 +222,26 @@ class Board:
         label = Board.create_and_customize_label(piece, x, y)
         label.draw(win)
         if piece == "K":
-            Board.set_target_rectangles(self, win, kingSquares)
+            Board.set_target_rectangles(win, kingSquares)
         elif piece == "Q":
-            Board.set_target_rectangles(self, win, rookSquares + bishopSquares)
+            Board.set_target_rectangles(win, rookSquares + bishopSquares)
         elif piece == "R":
-            Board.set_target_rectangles(self, win, rookSquares)
+            Board.set_target_rectangles(win, rookSquares)
         elif piece == "B":
-            Board.set_target_rectangles(self, win, bishopSquares)
+            Board.set_target_rectangles(win, bishopSquares)
         elif piece == "N":
-            Board.set_target_rectangles(self, win, knightSquares)
+            Board.set_target_rectangles(win, knightSquares)
         win.getMouse()
 
-    def set_target_rectangles(self, win, targetSquares):
+    @staticmethod
+    def set_target_rectangles(win, targetSquares):
         """creates the rectangles for the graphical board - the squares a piece can visit except its own location
         :param win: window object representing graphicalBoard
         :param targetSquares: a list with lists of coordinates for which the rectangles are set - the squares a piece can visit except its own location
         """
         for coordinate in targetSquares:  # type: object
             square = Board.convert_coordinate_to_rectangle(coordinate[0], coordinate[1])
-            square.setFill(self.rectangleTargetSquareColor)
+            square.setFill(Board.rectangleTargetSquareColor)
             square.draw(win)
 
     @staticmethod
