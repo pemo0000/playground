@@ -279,9 +279,10 @@ class Board:
                     extendedFenWoSlashes += element
             else:
                 extendedFenWoSlashes += element
-        # split list into sublists/chunks of 8 elements
+        for n, i in enumerate(extendedFenWoSlashes):
+            if i.isdigit():
+                extendedFenWoSlashes[n] = ' ' 
         chunks = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
-        # print \n after every chunk
         splitAfterNthItem = 8
         str_list = [
             '{}\n'.format(item)
