@@ -78,4 +78,4 @@ if  piece == "R" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, roo
 else:
         print("No catch!")
 board1.do_something_with_fen(fen)
-# board1.draw(piece, x, y, rookSquares, bishopSquares, kingSquares, knightSquares)
+board1.draw(piece, x, y, rookSquares, bishopSquares, kingSquares, knightSquares)

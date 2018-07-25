@@ -200,7 +200,7 @@ class Board:
         :param kingSquares: a list with lists of squares the king can visit
         :param knightSquares: a list with lists of squares the knight can visit
         """
-        win = GraphWin(width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
+        win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
         y1 = 1
         y2 = 11
@@ -231,7 +231,12 @@ class Board:
             Board.set_target_rectangles(win, bishopSquares)
         elif piece == "N":
             Board.set_target_rectangles(win, knightSquares)
-        win.getMouse()
+        knightImage = Image(Point(46, 46), "knight40.png")
+        knightImage.draw(win)
+        try:
+            win.getMouse()
+        except GraphicsError:
+            pass
 
     @staticmethod
     def set_target_rectangles(win, targetSquares):
