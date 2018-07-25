@@ -239,9 +239,7 @@ class Board:
         :param targetSquares: a list with lists of coordinates for which the rectangles are set - the squares a piece can visit except its own location
         """
         for coordinate in targetSquares:  # type: object
-            x = coordinate[0]
-            y = coordinate[1]
-            square = Board.convert_coordinate_to_rectangle(x, y)
+            square = Board.convert_coordinate_to_rectangle(coordinate[0], coordinate[1])
             square.setFill(self.rectangleTargetSquareColor)
             square.draw(win)
 
