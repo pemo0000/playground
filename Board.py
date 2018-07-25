@@ -219,8 +219,9 @@ class Board:
         square = Board.convert_coordinate_to_rectangle(x, y)
         square.setFill(self.rectangleHomeSquareColor)
         square.draw(win)
-        label = Board.create_and_customize_label(piece, x, y)
-        label.draw(win)
+        bishopImage = Image(Point((x * Board.rectangleSize) + 6, (y * Board.rectangleSize) + 6), "bishop40.png")
+        bishopImage.draw(win)
+        # label = Board.create_and_customize_label(win, piece, x, y)
         if piece == "K":
             Board.set_target_rectangles(win, kingSquares)
         elif piece == "Q":
@@ -231,8 +232,6 @@ class Board:
             Board.set_target_rectangles(win, bishopSquares)
         elif piece == "N":
             Board.set_target_rectangles(win, knightSquares)
-        knightImage = Image(Point(46, 46), "knight40.png")
-        knightImage.draw(win)
         try:
             win.getMouse()
         except GraphicsError:
@@ -259,7 +258,7 @@ class Board:
         return Rectangle(Point((x * Board.rectangleSize) + 1, (y * Board.rectangleSize) + 1), Point((x * Board.rectangleSize) + 11, (y * Board.rectangleSize) + 11))
 
     @staticmethod
-    def create_and_customize_label(piece, x, y):
+    def create_and_customize_label(win, piece, x, y):
         """Creates and customizes the lable for the piece to be placed on the board
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
@@ -270,6 +269,7 @@ class Board:
         label.setSize(16)
         label.setStyle("bold")
         label.setFill("blue")
+        label.draw(win)
         return label
 
     def do_something_with_fen(self, fen):
