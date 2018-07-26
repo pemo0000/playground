@@ -52,6 +52,37 @@ class Board:
             print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize])
 
+    def draw(self, piece, x, y, allSquares):
+        """Draws a graphical board.
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
+        :param allSquares: a list with lists of squares a piece can visit
+        """
+        y1 = 1
+        y2 = y1 + self.rectangleSize 
+        for i in range(0, self.boardsize):
+            x1 = 1
+            x2 = x1 + self.rectangleSize 
+            for j in range(0, self.boardsize):
+                square = Rectangle(Point(x1, y1), Point(x2, y2))
+                x1 += self.rectangleSize 
+                x2 += self.rectangleSize 
+                if i & 1 == j & 1:
+                    square.setFill(self.rectangleFillColorDarkSquares)
+                square.draw(self.win)
+            y1 += self.rectangleSize
+            y2 += self.rectangleSize
+        square = Board.convert_coordinate_to_rectangle(self, x, y)
+        square.setFill(self.rectangleHomeSquareColor)
+        square.draw(self.win)
+        Board.create_image(self, self.win, piece,x ,y)
+        Board.set_target_rectangles(self, self.win, allSquares)
+        try:
+            self.win.getMouse()
+        except GraphicsError:
+            pass
+
     def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
@@ -193,37 +224,6 @@ class Board:
         convertedCoordinate += [letter, int(items[1]) - 1]
         return convertedCoordinate in squares
 
-    def draw(self, piece, x, y, allSquares):
-        """Draws a graphical board.
-        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
-        :param x: x postion of the piece to put on the board
-        :param y: y postion of the piece to put on the board
-        :param allSquares: a list with lists of squares a piece can visit
-        """
-        y1 = 1
-        y2 = y1 + self.rectangleSize 
-        for i in range(0, self.boardsize):
-            x1 = 1
-            x2 = x1 + self.rectangleSize 
-            for j in range(0, self.boardsize):
-                square = Rectangle(Point(x1, y1), Point(x2, y2))
-                x1 += self.rectangleSize 
-                x2 += self.rectangleSize 
-                if i & 1 == j & 1:
-                    square.setFill(self.rectangleFillColorDarkSquares)
-                square.draw(self.win)
-            y1 += self.rectangleSize
-            y2 += self.rectangleSize
-        square = Board.convert_coordinate_to_rectangle(self, x, y)
-        square.setFill(self.rectangleHomeSquareColor)
-        square.draw(self.win)
-        Board.create_image(self, self.win, piece,x ,y)
-        Board.set_target_rectangles(self, self.win, allSquares)
-        try:
-            self.win.getMouse()
-        except GraphicsError:
-            pass
-
     def create_image(self, win, piece, x, y):
         """Creates image object and draws image
         :param win: window object representing graphicalBoard
@@ -294,3 +294,29 @@ class Board:
                 for item in chunks
             ]
             print('\n'.join(str_list))
+
+        FENwin = GraphWin("The Ultimate Chessboard v0.1 - display FEN", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
+        FENwin.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
+
+        y1 = 1
+        y2 = y1 + self.rectangleSize 
+        for i in range(self.boardsize - 1, -1, -1):
+            x1 = 1
+            x2 = x1 + self.rectangleSize 
+            for j in range(0, self.boardsize):
+                square = Rectangle(Point(x1, y1), Point(x2, y2))
+                x1 += self.rectangleSize 
+                x2 += self.rectangleSize 
+                if i & 1 == j & 1:
+                    square.setFill("grey")
+                    square.draw(FENwin)
+                    if chunks[i][j] != ' ':
+                        pieceImage = Image(Point(x1 - 5, y1 + 5), chunks[i][j] + "40.png")
+                        pieceImage.draw(FENwin)
+                else:
+                    square.draw(FENwin)
+                    if chunks[i][j] != ' ':
+                        pieceImage = Image(Point(x1 - 5, y1 + 5), chunks[i][j] + "40.png")
+                        pieceImage.draw(FENwin)
+            y1 += self.rectangleSize
+            y2 += self.rectangleSize

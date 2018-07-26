@@ -22,7 +22,8 @@ parser.add_argument("-f", "--flip",
 parser.add_argument("-t", "--target",
                     help="coordinate of the piece in question to be captured or not..", default="b2")
 parser.add_argument("-z", "--fen",
-                    help="FEN notation of a position of an 8x8 board. E.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2")
+                    help="FEN notation of a position of an 8x8 board. E.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2",
+                    default="r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2")
 args = parser.parse_args()
 
 def check_args():
