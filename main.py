@@ -69,13 +69,22 @@ board1 = Board(args.boardsize)
 rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 board1.set_squares(piece, rookSquares, bishopSquares, kingSquares, knightSquares)
 board1.print(piece, x, y, args.flip)
-if  piece == "R" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
-    piece == "Q" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + bishopSquares)   or\
-    piece == "B" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, bishopSquares)                 or\
-    piece == "K" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, kingSquares)                   or\
-    piece == "N" and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, knightSquares):
+if  (piece == "R" or piece == "r") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
+    (piece == "Q" or piece == "q") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + bishopSquares)   or\
+    (piece == "B" or piece == "b") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, bishopSquares)                 or\
+    (piece == "K" or piece == "k") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, kingSquares)                   or\
+    (piece == "N" or piece == "n") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, knightSquares):
         print("Catch!")
 else:
         print("No catch!")
 board1.do_something_with_fen(fen)
-board1.draw(piece, x, y, rookSquares, bishopSquares, kingSquares, knightSquares)
+if piece == "K" or piece == "k":
+    board1.draw(piece, x, y, kingSquares)
+elif piece == "Q" or piece == "q":
+    board1.draw(piece, x, y, rookSquares + bishopSquares)
+elif piece == "R" or piece == "r":
+    board1.draw(piece, x, y, rookSquares)
+elif piece == "B" or piece == "b":
+    board1.draw(piece, x, y, bishopSquares)
+elif piece == "N" or piece == "n":
+    board1.draw(piece, x, y, knightSquares)

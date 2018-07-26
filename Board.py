@@ -8,8 +8,6 @@ class Board:
     Biggest board is 26x26.
     """
     alphabet = list(string.ascii_lowercase)
-    windowSize = 50
-    rectangleSize = 10
     boardMargin = 2
     rectangleHomeSquareColor = "red"
     rectangleTargetSquareColor = "orange"
@@ -27,7 +25,9 @@ class Board:
                 else:
                     templine += [' ']
             self.board += [templine]
-
+        
+        self.windowSize = self.boardsize * 6.25
+        self.rectangleSize = self.boardsize * 1.25
         self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
 
@@ -193,21 +193,18 @@ class Board:
         convertedCoordinate += [letter, int(items[1]) - 1]
         return convertedCoordinate in squares
 
-    def draw(self, piece, x, y, rookSquares, bishopSquares, kingSquares, knightSquares):
+    def draw(self, piece, x, y, allSquares):
         """Draws a graphical board.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
-        :param rookSquares: a list with lists of squares the rook can visit
-        :param bishopSquares: a list with lists of squares the bishop can visit
-        :param kingSquares: a list with lists of squares the king can visit
-        :param knightSquares: a list with lists of squares the knight can visit
+        :param allSquares: a list with lists of squares a piece can visit
         """
         y1 = 1
-        y2 = 11
+        y2 = y1 + self.rectangleSize 
         for i in range(0, self.boardsize):
             x1 = 1
-            x2 = 11
+            x2 = x1 + self.rectangleSize 
             for j in range(0, self.boardsize):
                 square = Rectangle(Point(x1, y1), Point(x2, y2))
                 x1 += self.rectangleSize 
@@ -217,27 +214,17 @@ class Board:
                 square.draw(self.win)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
-        square = Board.convert_coordinate_to_rectangle(x, y)
+        square = Board.convert_coordinate_to_rectangle(self, x, y)
         square.setFill(self.rectangleHomeSquareColor)
         square.draw(self.win)
-        Board.create_image(self.win, piece,x ,y)
-        if piece == "K":
-            Board.set_target_rectangles(self.win, kingSquares)
-        elif piece == "Q":
-            Board.set_target_rectangles(self.win, rookSquares + bishopSquares)
-        elif piece == "R":
-            Board.set_target_rectangles(self.win, rookSquares)
-        elif piece == "B":
-            Board.set_target_rectangles(self.win, bishopSquares)
-        elif piece == "N":
-            Board.set_target_rectangles(self.win, knightSquares)
+        Board.create_image(self, self.win, piece,x ,y)
+        Board.set_target_rectangles(self, self.win, allSquares)
         try:
             self.win.getMouse()
         except GraphicsError:
             pass
 
-    @staticmethod
-    def create_image(win, piece, x, y):
+    def create_image(self, win, piece, x, y):
         """Creates image object and draws image
         :param win: window object representing graphicalBoard
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
@@ -245,28 +232,26 @@ class Board:
         :param y: y postion of the piece to put on the board
         :return: a label
         """
-        pieceImage = Image(Point((x * Board.rectangleSize) + 6, (y * Board.rectangleSize) + 6), piece + "40.png")
+        pieceImage = Image(Point((x * self.rectangleSize) + 6, (y * self.rectangleSize) + 6), piece + "40.png")
         pieceImage.draw(win)
 
-    @staticmethod
-    def set_target_rectangles(win, targetSquares):
+    def set_target_rectangles(self, win, targetSquares):
         """creates the rectangles for the graphical board - the squares a piece can visit except its own location
         :param win: window object representing graphicalBoard
         :param targetSquares: a list with lists of coordinates for which the rectangles are set - the squares a piece can visit except its own location
         """
         for coordinate in targetSquares:  # type: object
-            square = Board.convert_coordinate_to_rectangle(coordinate[0], coordinate[1])
+            square = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
             square.setFill(Board.rectangleTargetSquareColor)
             square.draw(win)
 
-    @staticmethod
-    def convert_coordinate_to_rectangle(x, y):
+    def convert_coordinate_to_rectangle(self, x, y):
         """Converts a coordinate to a rectangle
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         :return: a rectangle
         """
-        return Rectangle(Point((x * Board.rectangleSize) + 1, (y * Board.rectangleSize) + 1), Point((x * Board.rectangleSize) + 11, (y * Board.rectangleSize) + 11))
+        return Rectangle(Point((x * self.rectangleSize) + 1, (y * self.rectangleSize) + 1), Point((x * self.rectangleSize) + self.rectangleSize + 1, (y * self.rectangleSize) + self.rectangleSize + 1))
 
     @staticmethod
     def create_and_customize_label(win, piece, x, y):
