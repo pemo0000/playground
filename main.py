@@ -12,8 +12,8 @@ parser.add_argument("-b", "--boardsize",
                     help="integer [1-26] to define the boardsize to be drawn. Default is 8 -> chessboard.", type=int,
                     choices=range(1, 27), default=8)
 parser.add_argument("-p", "--pieces",
-                    help="comma separated list of chess piece [e.g. K,K,Q,...] you want to put on a square. Options are [K]ing, [Q]ueen, [R]ook, [B]ishop and K[N]ight.",
-                    default="Q")
+                    help="comma separated list of chess piece [e.g. K,K,Q,...] you want to put on a square. Options are [K]ing, [Q]ueen, [R]ook, [B]ishop and K[N]ight for white pieces, use lowercase [kqrbn] for a black piece..",
+                    choices=['K', 'Q', 'R', 'B', 'N', 'k', 'q', 'r', 'b', 'n'], default="Q")
 parser.add_argument("-c", "--coordinates",
                     help="comma separated list of coordinates [e.g. a1,b2,c3,...], where the chesspieces defined with -p are placed on the board.",
                     default="c3")
