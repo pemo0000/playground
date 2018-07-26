@@ -219,9 +219,7 @@ class Board:
         square = Board.convert_coordinate_to_rectangle(x, y)
         square.setFill(self.rectangleHomeSquareColor)
         square.draw(win)
-        bishopImage = Image(Point((x * Board.rectangleSize) + 6, (y * Board.rectangleSize) + 6), "bishop40.png")
-        bishopImage.draw(win)
-        # label = Board.create_and_customize_label(win, piece, x, y)
+        Board.create_image(win, piece,x ,y)
         if piece == "K":
             Board.set_target_rectangles(win, kingSquares)
         elif piece == "Q":
@@ -236,6 +234,18 @@ class Board:
             win.getMouse()
         except GraphicsError:
             pass
+
+    @staticmethod
+    def create_image(win, piece, x, y):
+        """Creates image object and draws image
+        :param win: window object representing graphicalBoard
+        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
+        :param x: x postion of the piece to put on the board
+        :param y: y postion of the piece to put on the board
+        :return: a label
+        """
+        pieceImage = Image(Point((x * Board.rectangleSize) + 6, (y * Board.rectangleSize) + 6), piece + "40.png")
+        pieceImage.draw(win)
 
     @staticmethod
     def set_target_rectangles(win, targetSquares):
