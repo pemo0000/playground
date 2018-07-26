@@ -286,24 +286,25 @@ class Board:
         """Is converting a FEN (Forsyth-Edwards-Notation) string into a list of lists that seems to look like a chess position - digits indicate blank squares
         :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2
         """
-        fenWoSlashes = fen.replace("/", "")
-        extendedFenWoSlashes = []
-        for element in fenWoSlashes:
-            if element.isdigit():
-                for i in range(0, int(element)):
+        if fen:
+            fenWoSlashes = fen.replace("/", "")
+            extendedFenWoSlashes = []
+            for element in fenWoSlashes:
+                if element.isdigit():
+                    for i in range(0, int(element)):
+                        extendedFenWoSlashes += element
+                else:
                     extendedFenWoSlashes += element
-            else:
-                extendedFenWoSlashes += element
-        for n, i in enumerate(extendedFenWoSlashes):
-            if i.isdigit():
-                extendedFenWoSlashes[n] = ' ' 
-        chunks = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
-        splitAfterNthItem = 8
-        str_list = [
-            '{}\n'.format(item)
-            if(((chunks.index(item)+1) % splitAfterNthItem) == 0)
-            else
-            '{}'.format(item)
-            for item in chunks
-        ]
-        print('\n'.join(str_list))
+            for n, i in enumerate(extendedFenWoSlashes):
+                if i.isdigit():
+                    extendedFenWoSlashes[n] = ' ' 
+            chunks = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
+            splitAfterNthItem = 8
+            str_list = [
+                '{}\n'.format(item)
+                if(((chunks.index(item)+1) % splitAfterNthItem) == 0)
+                else
+                '{}'.format(item)
+                for item in chunks
+            ]
+            print('\n'.join(str_list))
