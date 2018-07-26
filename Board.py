@@ -28,6 +28,9 @@ class Board:
                     templine += [' ']
             self.board += [templine]
 
+        self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
+        self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
+
     def print(self, piece, x, y, flip):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
@@ -200,8 +203,6 @@ class Board:
         :param kingSquares: a list with lists of squares the king can visit
         :param knightSquares: a list with lists of squares the knight can visit
         """
-        win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
-        win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
         y1 = 1
         y2 = 11
         for i in range(0, self.boardsize):
@@ -213,25 +214,25 @@ class Board:
                 x2 += self.rectangleSize 
                 if i & 1 == j & 1:
                     square.setFill(self.rectangleFillColorDarkSquares)
-                square.draw(win)
+                square.draw(self.win)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
         square = Board.convert_coordinate_to_rectangle(x, y)
         square.setFill(self.rectangleHomeSquareColor)
-        square.draw(win)
-        Board.create_image(win, piece,x ,y)
+        square.draw(self.win)
+        Board.create_image(self.win, piece,x ,y)
         if piece == "K":
-            Board.set_target_rectangles(win, kingSquares)
+            Board.set_target_rectangles(self.win, kingSquares)
         elif piece == "Q":
-            Board.set_target_rectangles(win, rookSquares + bishopSquares)
+            Board.set_target_rectangles(self.win, rookSquares + bishopSquares)
         elif piece == "R":
-            Board.set_target_rectangles(win, rookSquares)
+            Board.set_target_rectangles(self.win, rookSquares)
         elif piece == "B":
-            Board.set_target_rectangles(win, bishopSquares)
+            Board.set_target_rectangles(self.win, bishopSquares)
         elif piece == "N":
-            Board.set_target_rectangles(win, knightSquares)
+            Board.set_target_rectangles(self.win, knightSquares)
         try:
-            win.getMouse()
+            self.win.getMouse()
         except GraphicsError:
             pass
 
