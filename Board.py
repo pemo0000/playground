@@ -32,14 +32,17 @@ class Board:
         self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
 
-    def print(self, piece, x, y, flip):
+    def print(self, piece, x, y, reachableSquares, flip):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
+        :param reachableSquares: a list with lists of squares a piece can visit
         :param flip: flips = True flips the board (rotates it by 180°)
         """
         self.board[y][x] = piece
+        for coordinate in reachableSquares:
+            self.board[coordinate[1]][coordinate[0]] = piece.lower() 
         if flip:
             for i in range(0, self.boardsize):
                 print(str(i + 1) + "\t", end='')
@@ -59,6 +62,7 @@ class Board:
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         :param reachableSquares: a list with lists of squares a piece can visit
+        :param flip: flips = True flips the board (rotates it by 180°)
         """
         if flip:
             print("flip graphical board not implemented yet - will follow soon")
@@ -257,7 +261,7 @@ class Board:
         """
         return Rectangle(Point((x * self.rectangleSize) + 1, (y * self.rectangleSize) + 1), Point((x * self.rectangleSize) + self.rectangleSize + 1, (y * self.rectangleSize) + self.rectangleSize + 1))
 
-    def do_something_with_fen(self, fen):
+    def convert_fen_to_board_representation(self, fen):
         """Is converting a FEN (Forsyth-Edwards-Notation) string into a list of lists that seems to look like a chess position - digits indicate blank squares
         :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2
         """
@@ -273,20 +277,21 @@ class Board:
             for n, i in enumerate(extendedFenWoSlashes):
                 if i.isdigit():
                     extendedFenWoSlashes[n] = ' ' 
-            chunks = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
+            FEN2Board = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
             splitAfterNthItem = 8
             str_list = [
                 '{}\n'.format(item)
-                if(((chunks.index(item)+1) % splitAfterNthItem) == 0)
+                if(((FEN2Board.index(item)+1) % splitAfterNthItem) == 0)
                 else
                 '{}'.format(item)
-                for item in chunks
+                for item in FEN2Board
             ]
             print('\n'.join(str_list))
+        return FEN2Board              
 
+    def draw_fen(self, FEN2Board):
         FENwin = GraphWin("The Ultimate Chessboard v0.1 - display FEN", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         FENwin.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
-
         y1 = 1
         y2 = y1 + self.rectangleSize 
         for i in range(self.boardsize - 1, -1, -1):
@@ -299,13 +304,13 @@ class Board:
                 if i & 1 == j & 1:
                     square.setFill("grey")
                     square.draw(FENwin)
-                    if chunks[i][j] != ' ':
-                        pieceImage = Image(Point(x1 - 5, y1 + 5), chunks[i][j] + "40.png")
+                    if FEN2Board[i][j] != ' ':
+                        pieceImage = Image(Point(x1 - 5, y1 + 5), FEN2Board[i][j] + "40.png")
                         pieceImage.draw(FENwin)
                 else:
                     square.draw(FENwin)
-                    if chunks[i][j] != ' ':
-                        pieceImage = Image(Point(x1 - 5, y1 + 5), chunks[i][j] + "40.png")
+                    if FEN2Board[i][j] != ' ':
+                        pieceImage = Image(Point(x1 - 5, y1 + 5), FEN2Board[i][j] + "40.png")
                         pieceImage.draw(FENwin)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
