@@ -40,6 +40,7 @@ class Board:
         :param y: y postion of the piece to put on the board
         :param reachableSquares: a list with lists of squares a piece can visit
         :param flip: flips = True flips the board (rotates it by 180°)
+        :param displayReachableSquares: displayReachableSquares = True displays the squares a piece can visit
         :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         """
         # set home square of piece
@@ -71,6 +72,7 @@ class Board:
         :param y: y postion of the piece to put on the board
         :param reachableSquares: a list with lists of squares a piece can visit
         :param flip: flips = True flips the board (rotates it by 180°)
+        :param displayReachableSquares: displayReachableSquares = True displays the squares a piece can visit
         :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         """
         if flip:
