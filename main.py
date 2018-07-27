@@ -80,12 +80,12 @@ else:
         print("No catch!")
 board1.do_something_with_fen(fen)
 if piece == "K" or piece == "k":
-    board1.draw(piece, x, y, kingSquares)
+    board1.draw(piece, x, y, kingSquares, args.flip)
 elif piece == "Q" or piece == "q":
-    board1.draw(piece, x, y, rookSquares + bishopSquares)
+    board1.draw(piece, x, y, rookSquares + bishopSquares, args.flip)
 elif piece == "R" or piece == "r":
-    board1.draw(piece, x, y, rookSquares)
+    board1.draw(piece, x, y, rookSquares, args.flip)
 elif piece == "B" or piece == "b":
-    board1.draw(piece, x, y, bishopSquares)
+    board1.draw(piece, x, y, bishopSquares, args.flip)
 elif piece == "N" or piece == "n":
-    board1.draw(piece, x, y, knightSquares)
+    board1.draw(piece, x, y, knightSquares, args.flip)

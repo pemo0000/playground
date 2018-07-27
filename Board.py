@@ -9,6 +9,7 @@ class Board:
     """
     alphabet = list(string.ascii_lowercase)
     boardMargin = 2
+    offsetToCentralizeImage = 6
     rectangleHomeSquareColor = "red"
     rectangleTargetSquareColor = "orange"
     rectangleFillColorDarkSquares = "black"
@@ -52,36 +53,39 @@ class Board:
             print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize])
 
-    def draw(self, piece, x, y, allSquares):
+    def draw(self, piece, x, y, reachableSquares, flip):
         """Draws a graphical board.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
-        :param allSquares: a list with lists of squares a piece can visit
+        :param reachableSquares: a list with lists of squares a piece can visit
         """
-        y1 = 1
-        y2 = y1 + self.rectangleSize 
-        for i in range(0, self.boardsize):
-            x1 = 1
-            x2 = x1 + self.rectangleSize 
-            for j in range(0, self.boardsize):
-                square = Rectangle(Point(x1, y1), Point(x2, y2))
-                x1 += self.rectangleSize 
-                x2 += self.rectangleSize 
-                if i & 1 == j & 1:
-                    square.setFill(self.rectangleFillColorDarkSquares)
-                square.draw(self.win)
-            y1 += self.rectangleSize
-            y2 += self.rectangleSize
-        square = Board.convert_coordinate_to_rectangle(self, x, y)
-        square.setFill(self.rectangleHomeSquareColor)
-        square.draw(self.win)
-        Board.create_image(self, self.win, piece,x ,y)
-        Board.set_target_rectangles(self, self.win, allSquares)
-        try:
-            self.win.getMouse()
-        except GraphicsError:
-            pass
+        if flip:
+            print("flip graphical board not implemented yet - will follow soon")
+        else:
+            y1 = 1
+            y2 = y1 + self.rectangleSize 
+            for i in range(0, self.boardsize):
+                x1 = 1
+                x2 = x1 + self.rectangleSize 
+                for j in range(0, self.boardsize):
+                    square = Rectangle(Point(x1, y1), Point(x2, y2))
+                    x1 += self.rectangleSize 
+                    x2 += self.rectangleSize 
+                    if i & 1 == j & 1:
+                        square.setFill(self.rectangleFillColorDarkSquares)
+                    square.draw(self.win)
+                y1 += self.rectangleSize
+                y2 += self.rectangleSize
+            square = Board.convert_coordinate_to_rectangle(self, x, y)
+            square.setFill(self.rectangleHomeSquareColor)
+            square.draw(self.win)
+            Board.draw_image(self, self.win, piece, x ,y)
+            Board.set_target_rectangles(self, self.win, reachableSquares)
+            try:
+                self.win.getMouse()
+            except GraphicsError:
+                pass
 
     def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
@@ -199,13 +203,13 @@ class Board:
                             [x + 1, y + 2], [x + 2, y + 1], [x + 2, y - 1]]
         return self.__filter_legal_squares(allKnightSquares)
 
-    def __filter_legal_squares(self, allSquares):
+    def __filter_legal_squares(self, reachableSquares):
         """returns a list of "valid" squares/coordinates a piece can visit except its own position.
-        :param allSquares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
+        :param reachableSquares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.
         :return: a list with lists of valid coordinates - that means coordinates, that are really part of the board.
         """
         legalSquares = []
-        for coordinate in allSquares:
+        for coordinate in reachableSquares:
             if coordinate[0] >= 0 and self.boardsize > 0 <= coordinate[1] < self.boardsize:
                 legalSquares.append(coordinate)
         return legalSquares
@@ -224,7 +228,7 @@ class Board:
         convertedCoordinate += [letter, int(items[1]) - 1]
         return convertedCoordinate in squares
 
-    def create_image(self, win, piece, x, y):
+    def draw_image(self, win, piece, x, y):
         """Creates image object and draws image
         :param win: window object representing graphicalBoard
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
@@ -232,7 +236,7 @@ class Board:
         :param y: y postion of the piece to put on the board
         :return: a label
         """
-        pieceImage = Image(Point((x * self.rectangleSize) + 6, (y * self.rectangleSize) + 6), piece + "40.png")
+        pieceImage = Image(Point((x * self.rectangleSize) + self.offsetToCentralizeImage, (y * self.rectangleSize) + self.offsetToCentralizeImage), piece + "40.png")
         pieceImage.draw(win)
 
     def set_target_rectangles(self, win, targetSquares):
@@ -252,21 +256,6 @@ class Board:
         :return: a rectangle
         """
         return Rectangle(Point((x * self.rectangleSize) + 1, (y * self.rectangleSize) + 1), Point((x * self.rectangleSize) + self.rectangleSize + 1, (y * self.rectangleSize) + self.rectangleSize + 1))
-
-    @staticmethod
-    def create_and_customize_label(win, piece, x, y):
-        """Creates and customizes the lable for the piece to be placed on the board
-        :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
-        :param x: x postion of the piece to put on the board
-        :param y: y postion of the piece to put on the board
-        :return: a label
-        """
-        label = Text(Point((x * Board.rectangleSize) + 6, (y * Board.rectangleSize) + 6), piece)
-        label.setSize(16)
-        label.setStyle("bold")
-        label.setFill("blue")
-        label.draw(win)
-        return label
 
     def do_something_with_fen(self, fen):
         """Is converting a FEN (Forsyth-Edwards-Notation) string into a list of lists that seems to look like a chess position - digits indicate blank squares
