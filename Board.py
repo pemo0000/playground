@@ -33,7 +33,7 @@ class Board:
         self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
 
-    def print(self, piece, x, y, reachableSquares, flip, coordinateOfPieceToBeCaptured):
+    def print(self, piece, x, y, reachableSquares, flip, displayReachableSquares, coordinateOfPieceToBeCaptured):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
@@ -45,8 +45,9 @@ class Board:
         # set home square of piece
         self.board[y][x] = piece
         # set reachable squares
-        for coordinate in reachableSquares:
-            self.board[coordinate[1]][coordinate[0]] = piece.lower() 
+        if displayReachableSquares:
+            for coordinate in reachableSquares:
+                self.board[coordinate[1]][coordinate[0]] = piece.lower() 
         # set target square
         coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
         self.board[coordinate[1]][coordinate[0]] = "T"
@@ -63,7 +64,7 @@ class Board:
             print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize])
 
-    def draw(self, piece, x, y, reachableSquares, flip, coordinateOfPieceToBeCaptured):
+    def draw(self, piece, x, y, reachableSquares, flip, displayReachableSquares, coordinateOfPieceToBeCaptured):
         """Draws a graphical board.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
@@ -95,7 +96,8 @@ class Board:
             homeSquare.draw(self.win)
             # draw picture and reachable squares
             Board.draw_image(self, self.win, piece, x ,y)
-            Board.set_target_rectangles(self, self.win, reachableSquares)
+            if displayReachableSquares:
+                Board.set_target_rectangles(self, self.win, reachableSquares)
             # target square of the piece in question to be captured
             coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
             targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])

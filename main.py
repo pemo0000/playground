@@ -19,6 +19,8 @@ parser.add_argument("-c", "--coordinates",
                     default="c3")
 parser.add_argument("-f", "--flip",
                     help="flips the board.", action="store_true")
+parser.add_argument("-d", "--displayReachableSquares",
+                    help="displays the squares a piece can visit except its own position.", action="store_true")
 parser.add_argument("-t", "--target",
                     help="coordinate of the piece in question to be captured or not..", default="b2")
 parser.add_argument("-z", "--fen",
@@ -70,15 +72,15 @@ board1 = Board(args.boardsize)
 rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 
 if piece == "K" or piece == "k":
-    board1.print(piece, x, y, kingSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.print(piece, x, y, kingSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "Q" or piece == "q":
-    board1.print(piece, x, y, rookSquares + bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.print(piece, x, y, rookSquares + bishopSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "R" or piece == "r":
-    board1.print(piece, x, y, rookSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.print(piece, x, y, rookSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "B" or piece == "b":
-    board1.print(piece, x, y, bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.print(piece, x, y, bishopSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "N" or piece == "n":
-    board1.print(piece, x, y, knightSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.print(piece, x, y, knightSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 
 if  (piece == "R" or piece == "r") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
     (piece == "Q" or piece == "q") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + bishopSquares)   or\
@@ -92,12 +94,12 @@ else:
 board1.draw_fen(board1.convert_fen_to_board_representation(fen))
 
 if piece == "K" or piece == "k":
-    board1.draw(piece, x, y, kingSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares,coordinateOfPieceToBeCaptured)
 elif piece == "Q" or piece == "q":
-    board1.draw(piece, x, y, rookSquares + bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.draw(piece, x, y, rookSquares + bishopSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "R" or piece == "r":
-    board1.draw(piece, x, y, rookSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.draw(piece, x, y, rookSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "B" or piece == "b":
-    board1.draw(piece, x, y, bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.draw(piece, x, y, bishopSquares, args.flip,args. displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "N" or piece == "n":
-    board1.draw(piece, x, y, knightSquares, args.flip, coordinateOfPieceToBeCaptured)
+    board1.draw(piece, x, y, knightSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
