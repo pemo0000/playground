@@ -70,15 +70,15 @@ board1 = Board(args.boardsize)
 rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 
 if piece == "K" or piece == "k":
-    board1.print(piece, x, y, kingSquares, args.flip)
+    board1.print(piece, x, y, kingSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "Q" or piece == "q":
-    board1.print(piece, x, y, rookSquares + bishopSquares, args.flip)
+    board1.print(piece, x, y, rookSquares + bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "R" or piece == "r":
-    board1.print(piece, x, y, rookSquares, args.flip)
+    board1.print(piece, x, y, rookSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "B" or piece == "b":
-    board1.print(piece, x, y, bishopSquares, args.flip)
+    board1.print(piece, x, y, bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "N" or piece == "n":
-    board1.print(piece, x, y, knightSquares, args.flip)
+    board1.print(piece, x, y, knightSquares, args.flip, coordinateOfPieceToBeCaptured)
 
 if  (piece == "R" or piece == "r") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares)                   or\
     (piece == "Q" or piece == "q") and Board.try_to_catch_piece(coordinateOfPieceToBeCaptured, rookSquares + bishopSquares)   or\
@@ -92,12 +92,12 @@ else:
 board1.draw_fen(board1.convert_fen_to_board_representation(fen))
 
 if piece == "K" or piece == "k":
-    board1.draw(piece, x, y, kingSquares, args.flip)
+    board1.draw(piece, x, y, kingSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "Q" or piece == "q":
-    board1.draw(piece, x, y, rookSquares + bishopSquares, args.flip)
+    board1.draw(piece, x, y, rookSquares + bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "R" or piece == "r":
-    board1.draw(piece, x, y, rookSquares, args.flip)
+    board1.draw(piece, x, y, rookSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "B" or piece == "b":
-    board1.draw(piece, x, y, bishopSquares, args.flip)
+    board1.draw(piece, x, y, bishopSquares, args.flip, coordinateOfPieceToBeCaptured)
 elif piece == "N" or piece == "n":
-    board1.draw(piece, x, y, knightSquares, args.flip)
+    board1.draw(piece, x, y, knightSquares, args.flip, coordinateOfPieceToBeCaptured)

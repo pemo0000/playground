@@ -12,6 +12,7 @@ class Board:
     offsetToCentralizeImage = 6
     rectangleHomeSquareColor = "red"
     rectangleTargetSquareColor = "orange"
+    rectangleCaptureSquareColor = "green"
     rectangleFillColorDarkSquares = "black"
 
     def __init__(self, boardsize):
@@ -32,17 +33,23 @@ class Board:
         self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
 
-    def print(self, piece, x, y, reachableSquares, flip):
+    def print(self, piece, x, y, reachableSquares, flip, coordinateOfPieceToBeCaptured):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         :param reachableSquares: a list with lists of squares a piece can visit
         :param flip: flips = True flips the board (rotates it by 180°)
+        :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         """
+        # set home square of piece
         self.board[y][x] = piece
+        # set reachable squares
         for coordinate in reachableSquares:
             self.board[coordinate[1]][coordinate[0]] = piece.lower() 
+        # set target square
+        coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+        self.board[coordinate[1]][coordinate[0]] = "T"
         if flip:
             for i in range(0, self.boardsize):
                 print(str(i + 1) + "\t", end='')
@@ -56,13 +63,14 @@ class Board:
             print("\t", end='')
             print(string.ascii_lowercase[:self.boardsize])
 
-    def draw(self, piece, x, y, reachableSquares, flip):
+    def draw(self, piece, x, y, reachableSquares, flip, coordinateOfPieceToBeCaptured):
         """Draws a graphical board.
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param x: x postion of the piece to put on the board
         :param y: y postion of the piece to put on the board
         :param reachableSquares: a list with lists of squares a piece can visit
         :param flip: flips = True flips the board (rotates it by 180°)
+        :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         """
         if flip:
             print("flip graphical board not implemented yet - will follow soon")
@@ -81,15 +89,34 @@ class Board:
                     square.draw(self.win)
                 y1 += self.rectangleSize
                 y2 += self.rectangleSize
-            square = Board.convert_coordinate_to_rectangle(self, x, y)
-            square.setFill(self.rectangleHomeSquareColor)
-            square.draw(self.win)
+            # home square of piece
+            homeSquare = Board.convert_coordinate_to_rectangle(self, x, y)
+            homeSquare.setFill(self.rectangleHomeSquareColor)
+            homeSquare.draw(self.win)
+            # draw picture and reachable squares
             Board.draw_image(self, self.win, piece, x ,y)
             Board.set_target_rectangles(self, self.win, reachableSquares)
+            # target square of the piece in question to be captured
+            coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+            targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
+            targetSquare.setFill(self.rectangleCaptureSquareColor)
+            targetSquare.draw(self.win)
             try:
                 self.win.getMouse()
             except GraphicsError:
                 pass
+
+    def convert_square_to_coordinate(self, square):
+        """converts a square into a coordinate.
+        :param square: square of type <character><digit>, e.g. e1, e8, or f7
+        :return: a list with a coordinate (tupel) of type (x, y), e.g. (1,0) or (3,7)
+        """
+        match = re.match(r'([a-z]+)([0-9]+)', square, re.I)
+        items = match.groups()
+        letter = Board.alphabet.index(items[0])
+        coordinate = []
+        coordinate += [letter, int(items[1]) - 1]
+        return coordinate
 
     def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
         """Sets the coordinates a piece can visit
