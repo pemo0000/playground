@@ -13,7 +13,7 @@ parser.add_argument("-b", "--boardsize",
                     choices=range(1, 27), default=8)
 parser.add_argument("-p", "--pieces",
                     help="comma separated list of chess piece [e.g. K,K,Q,...] you want to put on a square. Options are [K]ing, [Q]ueen, [R]ook, [B]ishop and K[N]ight for white pieces, use lowercase [kqrbn] for a black piece..",
-                    choices=['K', 'Q', 'R', 'B', 'N', 'k', 'q', 'r', 'b', 'n'], default="Q")
+                    default="Q")
 parser.add_argument("-c", "--coordinates",
                     help="comma separated list of coordinates [e.g. a1,b2,c3,...], where the chesspieces defined with -p are placed on the board.",
                     default="c3")
@@ -22,7 +22,7 @@ parser.add_argument("-f", "--flip",
 parser.add_argument("-d", "--displayReachableSquares",
                     help="displays the squares a piece can visit except its own position.", action="store_true")
 parser.add_argument("-t", "--target",
-                    help="coordinate of the piece in question to be captured or not..", default="b2")
+                    help="coordinate of the piece in question to be captured or not..")
 parser.add_argument("-z", "--fen",
                     help="FEN notation of a position of an 8x8 board. E.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2",
                     default="r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2")

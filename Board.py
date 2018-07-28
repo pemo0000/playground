@@ -50,8 +50,9 @@ class Board:
             for coordinate in reachableSquares:
                 self.board[coordinate[1]][coordinate[0]] = piece.lower() 
         # set target square
-        coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
-        self.board[coordinate[1]][coordinate[0]] = "T"
+        if coordinateOfPieceToBeCaptured:
+            coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+            self.board[coordinate[1]][coordinate[0]] = "T"
         if flip:
             for i in range(0, self.boardsize):
                 print(str(i + 1) + "\t", end='')
@@ -101,10 +102,11 @@ class Board:
             if displayReachableSquares:
                 Board.set_target_rectangles(self, self.win, reachableSquares)
             # target square of the piece in question to be captured
-            coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
-            targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
-            targetSquare.setFill(self.rectangleCaptureSquareColor)
-            targetSquare.draw(self.win)
+            if coordinateOfPieceToBeCaptured:
+                coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+                targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
+                targetSquare.setFill(self.rectangleCaptureSquareColor)
+                targetSquare.draw(self.win)
             try:
                 self.win.getMouse()
             except GraphicsError:
@@ -256,12 +258,13 @@ class Board:
         :param squares: a list with lists of coordinates the piece, that might capture another piece, can visit
         :return: True in case of a catch, False if no catch is possible
         """
-        match = re.match(r'([a-z]+)([0-9]+)', coordinateOfPieceToBeCaptured, re.I)
-        items = match.groups()
-        letter = Board.alphabet.index(items[0])
-        convertedCoordinate = []
-        convertedCoordinate += [letter, int(items[1]) - 1]
-        return convertedCoordinate in squares
+        if coordinateOfPieceToBeCaptured:
+            match = re.match(r'([a-z]+)([0-9]+)', coordinateOfPieceToBeCaptured, re.I)
+            items = match.groups()
+            letter = Board.alphabet.index(items[0])
+            convertedCoordinate = []
+            convertedCoordinate += [letter, int(items[1]) - 1]
+            return convertedCoordinate in squares
 
     def draw_image(self, win, piece, x, y):
         """Creates image object and draws image
