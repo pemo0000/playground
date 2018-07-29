@@ -77,7 +77,52 @@ class Board:
         :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         """
         if flip:
-            print("flip graphical board not implemented yet - will follow soon")
+            xflip = self.boardsize - 1 - x
+            yflip = self.boardsize - 1 - y
+            y1 = 1
+            y2 = y1 + self.rectangleSize 
+            for i in range(0, self.boardsize):
+                x1 = 1
+                x2 = x1 + self.rectangleSize 
+                for j in range(0, self.boardsize):
+                    square = Rectangle(Point(x1, y1), Point(x2, y2))
+                    x1 += self.rectangleSize 
+                    x2 += self.rectangleSize 
+                    if i & 1 != j & 1:
+                        square.setFill(self.rectangleFillColorDarkSquares)
+                    square.draw(self.win)
+                y1 += self.rectangleSize
+                y2 += self.rectangleSize
+            # home square of piece
+            homeSquare = Board.convert_coordinate_to_rectangle(self, xflip, yflip)
+            homeSquare.setFill(self.rectangleHomeSquareColor)
+            homeSquare.draw(self.win)
+            # draw picture and reachable squares
+            Board.draw_image(self, self.win, piece, xflip ,yflip)
+            if displayReachableSquares:
+                if piece == "B" or piece =="b":
+                    flippedReachableSquares = Board.bishop_squares(self, xflip, yflip)
+                elif piece == "R" or piece == "r":
+                    flippedReachableSquares = Board.rook_squares(self, xflip, yflip)
+                elif piece == "K" or piece == "k":
+                    flippedReachableSquares = Board.king_squares(self, xflip, yflip)
+                elif piece == "Q" or piece == "q":
+                    flippedReachableSquares = Board.queen_squares(self, xflip, yflip)
+                elif piece == "N" or piece == "n":
+                    flippedReachableSquares = Board.knight_squares(self, xflip, yflip)
+                Board.set_target_rectangles(self, self.win, flippedReachableSquares)
+            # target square of the piece in question to be captured
+            if coordinateOfPieceToBeCaptured:
+                coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+                flippedXCoordinateOfPieceToBeCaptured = self.boardsize - 1 - coordinate[0]
+                flippedYCoordinateOfPieceToBeCaptured = self.boardsize - 1 - coordinate[1]
+                targetSquare = Board.convert_coordinate_to_rectangle(self, flippedXCoordinateOfPieceToBeCaptured, flippedYCoordinateOfPieceToBeCaptured)
+                targetSquare.setFill(self.rectangleCaptureSquareColor)
+                targetSquare.draw(self.win)
+            try:
+                self.win.getMouse()
+            except GraphicsError:
+                pass
         else:
             y1 = 1
             y2 = y1 + self.rectangleSize 
