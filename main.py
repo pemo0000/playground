@@ -3,6 +3,7 @@ import argparse
 import sys
 
 from Board import *
+from DB import *
 
 print("Running...\n")
 
@@ -71,6 +72,7 @@ fen = args.fen
 # Main stuff...
 check_args()
 board1 = Board(args.boardsize)
+db = DB()
 rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
 
 if piece == "K" or piece == "k":
@@ -95,7 +97,7 @@ else:
 
 board1.draw_fen(board1.convert_fen_to_board_representation(fen))
 if args.saveFEN:
-    board1.insert_FEN_into_sqlite(fen)    
+    db.insertFEN(fen)    
 
 if piece == "K" or piece == "k":
     board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares,coordinateOfPieceToBeCaptured)

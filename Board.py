@@ -34,7 +34,6 @@ class Board:
         self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
 
-        self.db = DB()
 
     def print(self, piece, x, y, reachableSquares, flip, displayReachableSquares, coordinateOfPieceToBeCaptured):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
@@ -400,9 +399,3 @@ class Board:
                         pieceImage.draw(FENwin)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
-
-    def insert_FEN_into_sqlite(self, fen):
-        """Is inserting FEN into sqlite if script is called with a FEN and -s
-        :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2 w KQkq - 0 25
-        """
-        self.db.insertFEN(fen)
