@@ -335,7 +335,7 @@ class Board:
                 square = Rectangle(Point(x1, y1), Point(x2, y2))
                 x1 += self.rectangleSize 
                 x2 += self.rectangleSize 
-                if i & 1 == j & 1:
+                if i & 1 != j & 1:
                     square.setFill("grey")
                     square.draw(FENwin)
                     if FEN2Board[i][j] != ' ':
