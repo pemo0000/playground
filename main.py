@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import argparse
-import sys
 
 from Board import *
 from DB import *
@@ -100,7 +99,7 @@ if args.saveFEN:
     db.insertFEN(fen)    
 
 if piece == "K" or piece == "k":
-    board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares,coordinateOfPieceToBeCaptured)
+    board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares ,coordinateOfPieceToBeCaptured)
 elif piece == "Q" or piece == "q":
     board1.draw(piece, x, y, rookSquares + bishopSquares, args.flip, args.displayReachableSquares, coordinateOfPieceToBeCaptured)
 elif piece == "R" or piece == "r":

@@ -1,7 +1,6 @@
 import string
 import re
 from graphics import *
-from DB import *
 
 
 class Board:
@@ -109,7 +108,7 @@ class Board:
                 elif piece == "K" or piece == "k":
                     flippedReachableSquares = Board.king_squares(self, xflip, yflip)
                 elif piece == "Q" or piece == "q":
-                    flippedReachableSquares = Board.queen_squares(self, xflip, yflip)
+                    flippedReachableSquares = Board.bishop_squares(self, xflip, yflip) + Board.rook_squares(self, xflip, yflip)
                 elif piece == "N" or piece == "n":
                     flippedReachableSquares = Board.knight_squares(self, xflip, yflip)
                 Board.set_target_rectangles(self, self.win, flippedReachableSquares)
