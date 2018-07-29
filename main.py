@@ -26,6 +26,8 @@ parser.add_argument("-t", "--target",
 parser.add_argument("-z", "--fen",
                     help="FEN notation of a position of an 8x8 board. E.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2",
                     default="r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2")
+parser.add_argument("-s", "--saveFEN",
+                    help="inserts FEN in sqlite.", action="store_true")
 args = parser.parse_args()
 
 def check_args():
@@ -92,6 +94,8 @@ else:
         print("No catch!")
 
 board1.draw_fen(board1.convert_fen_to_board_representation(fen))
+if args.saveFEN:
+    board1.insert_FEN_into_sqlite(fen)    
 
 if piece == "K" or piece == "k":
     board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares,coordinateOfPieceToBeCaptured)
