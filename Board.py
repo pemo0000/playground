@@ -341,11 +341,12 @@ class Board:
         return Rectangle(Point((x * self.rectangleSize) + 1, (y * self.rectangleSize) + 1), Point((x * self.rectangleSize) + self.rectangleSize + 1, (y * self.rectangleSize) + self.rectangleSize + 1))
 
     def convert_fen_to_board_representation(self, fen):
-        """Is converting a FEN (Forsyth-Edwards-Notation) string into a list of lists that seems to look like a chess position - digits indicate blank squares
-        :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2
+        """Is converting FEN (Forsyth-Edwards-Notation) into a chess board representation
+        :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2 w KQkq - 0 25
         """
         if fen:
-            fenWoSlashes = fen.replace("/", "")
+            fenParts = fen.split(" ")
+            fenWoSlashes = fenParts[0].replace("/", "")
             extendedFenWoSlashes = []
             for element in fenWoSlashes:
                 if element.isdigit():
@@ -369,6 +370,9 @@ class Board:
         return FEN2Board              
 
     def draw_fen(self, FEN2Board):
+        """Is drawing the converted FEN to a board 
+        :param FEN2Board: list of lists (8x8), that represents all squares on the board with its pieces
+        """
         FENwin = GraphWin("The Ultimate Chessboard v0.1 - display FEN", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
         FENwin.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
         y1 = 1
