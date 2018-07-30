@@ -91,9 +91,10 @@ if  (piece == "R" or piece == "r") and Board.try_to_catch_piece(args.target, roo
 else:
         print("No catch!")
 
-board1.draw_fen(board1.convert_fen_to_board_representation(args.fen))
-if args.saveFEN:
-    db.insertFEN(args.fen)    
+if args.boardsize == 8 and args.fen:
+    board1.draw_fen(board1.convert_fen_to_board_representation(args.fen))
+    if args.saveFEN:
+        db.insertFEN(args.fen)    
 
 if piece == "K" or piece == "k":
     board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares ,args.target)

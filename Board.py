@@ -8,13 +8,12 @@ class Board:
     Biggest board is 26x26.
     """
     alphabet = list(string.ascii_lowercase)
-    boardMargin = 2
-    offsetToCentralizeImage = 6
-    offsetToCentralizeImageInFEN = 5
     rectangleHomeSquareColor = "red"
     rectangleTargetSquareColor = "orange"
     rectangleCaptureSquareColor = "green"
     rectangleFillColorDarkSquares = "black"
+    graphWinWidth = 400
+    graphWinHeight = graphWinWidth
 
     def __init__(self, boardsize):
         """Constructor"""
@@ -29,10 +28,11 @@ class Board:
                     templine += [' ']
             self.board += [templine]
         
-        self.windowSize = self.boardsize * 6.25
-        self.rectangleSize = self.boardsize * 1.25
-        self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
-        self.win.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
+        self.rectangleSize = self.graphWinWidth / self.boardsize
+        self.offsetToCentralizeImageInFEN = self.rectangleSize / 2
+        self.offsetToCentralizeImage = self.rectangleSize / 2
+        self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.graphWinWidth, height=self.graphWinHeight)
+        self.win.setCoords(0, 0, self.boardsize * self.rectangleSize, self.boardsize * self.rectangleSize)
 
 
     def print(self, piece, x, y, reachableSquares, flip, displayReachableSquares, coordinateOfPieceToBeCaptured):
@@ -53,7 +53,7 @@ class Board:
                 self.board[coordinate[1]][coordinate[0]] = piece.lower() 
         # set target square
         if coordinateOfPieceToBeCaptured:
-            coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+            coordinate = Board.convert_square_to_coordinate(coordinateOfPieceToBeCaptured)
             self.board[coordinate[1]][coordinate[0]] = "T"
         if flip:
             for i in range(0, self.boardsize):
@@ -78,13 +78,13 @@ class Board:
         :param displayReachableSquares: displayReachableSquares = True displays the squares a piece can visit
         :param coordinateOfPieceToBeCaptured: square of the piece, that might be catured or not by another piece
         """
+        y1 = 0
+        y2 = y1 + self.rectangleSize 
         if flip:
             xflip = self.boardsize - 1 - x
             yflip = self.boardsize - 1 - y
-            y1 = 1
-            y2 = y1 + self.rectangleSize 
             for i in range(0, self.boardsize):
-                x1 = 1
+                x1 = 0
                 x2 = x1 + self.rectangleSize 
                 for j in range(0, self.boardsize):
                     square = Rectangle(Point(x1, y1), Point(x2, y2))
@@ -115,7 +115,7 @@ class Board:
                 Board.set_target_rectangles(self, self.win, flippedReachableSquares)
             # target square of the piece in question to be captured
             if coordinateOfPieceToBeCaptured:
-                coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+                coordinate = Board.convert_square_to_coordinate(coordinateOfPieceToBeCaptured)
                 flippedXCoordinateOfPieceToBeCaptured = self.boardsize - 1 - coordinate[0]
                 flippedYCoordinateOfPieceToBeCaptured = self.boardsize - 1 - coordinate[1]
                 targetSquare = Board.convert_coordinate_to_rectangle(self, flippedXCoordinateOfPieceToBeCaptured, flippedYCoordinateOfPieceToBeCaptured)
@@ -126,10 +126,8 @@ class Board:
             except GraphicsError:
                 pass
         else:
-            y1 = 1
-            y2 = y1 + self.rectangleSize 
             for i in range(0, self.boardsize):
-                x1 = 1
+                x1 = 0
                 x2 = x1 + self.rectangleSize 
                 for j in range(0, self.boardsize):
                     square = Rectangle(Point(x1, y1), Point(x2, y2))
@@ -150,7 +148,7 @@ class Board:
                 Board.set_target_rectangles(self, self.win, reachableSquares)
             # target square of the piece in question to be captured
             if coordinateOfPieceToBeCaptured:
-                coordinate = Board.convert_square_to_coordinate(self, coordinateOfPieceToBeCaptured)
+                coordinate = Board.convert_square_to_coordinate(coordinateOfPieceToBeCaptured)
                 targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
                 targetSquare.setFill(self.rectangleCaptureSquareColor)
                 targetSquare.draw(self.win)
@@ -159,7 +157,8 @@ class Board:
             except GraphicsError:
                 pass
 
-    def convert_square_to_coordinate(self, square):
+    @staticmethod 
+    def convert_square_to_coordinate(square):
         """converts a square into a coordinate.
         :param square: square of type <character><digit>, e.g. e1, e8, or f7
         :return: a list with a coordinate (tupel) of type (x, y), e.g. (1,0) or (3,7)
@@ -295,7 +294,6 @@ class Board:
         legalSquares = []
         for coordinate in reachableSquares:
             if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
-            #if coordinate[0] >= 0 and self.boardsize > 0 <= coordinate[1] < self.boardsize:
                 legalSquares.append(coordinate)
         return legalSquares
 
@@ -341,9 +339,10 @@ class Board:
         :param y: y postion of the piece to put on the board
         :return: a rectangle
         """
-        return Rectangle(Point((x * self.rectangleSize) + 1, (y * self.rectangleSize) + 1), Point((x * self.rectangleSize) + self.rectangleSize + 1, (y * self.rectangleSize) + self.rectangleSize + 1))
+        return Rectangle(Point(x * self.rectangleSize, y * self.rectangleSize), Point(x * self.rectangleSize + self.rectangleSize, y * self.rectangleSize + self.rectangleSize))
 
-    def convert_fen_to_board_representation(self, fen):
+    @staticmethod
+    def convert_fen_to_board_representation(fen):
         """Is converting FEN (Forsyth-Edwards-Notation) into a chess board representation
         :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2 w KQkq - 0 25
         """
@@ -376,8 +375,8 @@ class Board:
         """Is drawing the converted FEN to a board 
         :param FEN2Board: list of lists (8x8), that represents all squares on the board with its pieces
         """
-        FENwin = GraphWin("The Ultimate Chessboard v0.1 - display FEN", width=self.boardsize * self.windowSize, height=self.boardsize * self.windowSize)
-        FENwin.setCoords(0, 0, self.boardsize * self.rectangleSize + self.boardMargin, self.boardsize * self.rectangleSize + self.boardMargin)
+        FENwin = GraphWin("The Ultimate Chessboard v0.1 - display FEN", width=self.graphWinWidth, height=self.graphWinHeight)
+        FENwin.setCoords(0, 0, self.boardsize * self.rectangleSize, self.boardsize * self.rectangleSize)
         y1 = 1
         y2 = y1 + self.rectangleSize 
         for i in range(self.boardsize - 1, -1, -1):
