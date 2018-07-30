@@ -10,6 +10,7 @@ class Board:
     alphabet = list(string.ascii_lowercase)
     boardMargin = 2
     offsetToCentralizeImage = 6
+    offsetToCentralizeImageInFEN = 5
     rectangleHomeSquareColor = "red"
     rectangleTargetSquareColor = "orange"
     rectangleCaptureSquareColor = "green"
@@ -389,12 +390,12 @@ class Board:
                     square.setFill("grey")
                     square.draw(FENwin)
                     if FEN2Board[i][j] != ' ':
-                        pieceImage = Image(Point(x1 - 5, y1 + 5), FEN2Board[i][j] + "40.png")
+                        pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), FEN2Board[i][j] + "40.png")
                         pieceImage.draw(FENwin)
                 else:
                     square.draw(FENwin)
                     if FEN2Board[i][j] != ' ':
-                        pieceImage = Image(Point(x1 - 5, y1 + 5), FEN2Board[i][j] + "40.png")
+                        pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), FEN2Board[i][j] + "40.png")
                         pieceImage.draw(FENwin)
             y1 += self.rectangleSize
             y2 += self.rectangleSize

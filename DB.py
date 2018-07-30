@@ -23,7 +23,12 @@ class DB:
         """Is inserting FEN into sqlite if script is called with a FEN and -s
         :param fen: chess position in Forsyth-Edwards-Notation (FEN), e.g. r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2 w KQkq - 0 25
         """
-        self.cursor.execute("insert into FEN values(?);", [fen])
+        self.cursor.execute("select count(*) from FEN where fen = ?;", [fen])
+        data = self.cursor.fetchone()[0]
+        if data == 0: 
+            self.cursor.execute("insert into FEN values(?);", [fen])
+        else:
+            pass
 
     def __del__(self):
         """Destructor"""
