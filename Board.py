@@ -294,7 +294,8 @@ class Board:
         """
         legalSquares = []
         for coordinate in reachableSquares:
-            if coordinate[0] >= 0 and self.boardsize > 0 <= coordinate[1] < self.boardsize:
+            if coordinate[0] >= 0 and coordinate[1] >= 0 and coordinate[0] < self.boardsize and coordinate[1] < self.boardsize:
+            #if coordinate[0] >= 0 and self.boardsize > 0 <= coordinate[1] < self.boardsize:
                 legalSquares.append(coordinate)
         return legalSquares
 
