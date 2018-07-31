@@ -437,15 +437,10 @@ class Board:
                 x2 += self.rectangleSize 
                 if i & 1 != j & 1:
                     square.setFill(Board.preferences["FEN"]["darkSquareColor"])
-                    square.draw(boardwin)
-                    if boardRepresentation[i][j] != ' ':
-                        pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), boardRepresentation[i][j] + "40.png")
-                        pieceImage.draw(boardwin)
-                else:
-                    square.draw(boardwin)
-                    if boardRepresentation[i][j] != ' ':
-                        pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), boardRepresentation[i][j] + "40.png")
-                        pieceImage.draw(boardwin)
+                square.draw(boardwin)
+                if boardRepresentation[i][j] != ' ':
+                    pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), boardRepresentation[i][j] + "40.png")
+                    pieceImage.draw(boardwin)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
 
