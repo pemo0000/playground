@@ -400,7 +400,8 @@ class Board:
             y1 += self.rectangleSize
             y2 += self.rectangleSize
 
-    def dump_preferences_to_json(self):
+    @staticmethod
+    def dump_preferences_to_json():
         """Is dumping the preferences (stored in a dictionary) to 'preferences.json' """
         with open('preferences.json', 'w') as fp:
             json.dump(Board.preferences, fp)

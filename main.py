@@ -109,4 +109,4 @@ elif piece == "N" or piece == "n":
     board1.draw(piece, x, y, knightSquares, args.flip, args.displayReachableSquares, args.target)
 
 if not os.path.exists("preferences.json"):
-    board1.dump_preferences_to_json()
+    Board.dump_preferences_to_json()
