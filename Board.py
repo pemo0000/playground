@@ -123,10 +123,6 @@ class Board:
                 targetSquare = Board.convert_coordinate_to_rectangle(self, flippedXCoordinateOfPieceToBeCaptured, flippedYCoordinateOfPieceToBeCaptured)
                 targetSquare.setFill(Board.preferences["Default"]["captureSquareColor"])
                 targetSquare.draw(self.win)
-            try:
-                self.win.getMouse()
-            except GraphicsError:
-                pass
         else:
             for i in range(0, self.boardsize):
                 x1 = 0
@@ -154,10 +150,6 @@ class Board:
                 targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
                 targetSquare.setFill(Board.preferences["Default"]["captureSquareColor"])
                 targetSquare.draw(self.win)
-            try:
-                self.win.getMouse()
-            except GraphicsError:
-                pass
 
     @staticmethod 
     def convert_square_to_coordinate(square):
@@ -443,6 +435,10 @@ class Board:
                     pieceImage.draw(boardwin)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
+        try:
+            self.win.getMouse()
+        except GraphicsError:
+            pass
 
     @staticmethod
     def dump_preferences_to_json():
