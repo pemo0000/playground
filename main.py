@@ -97,6 +97,8 @@ if args.boardsize == 8 and args.fen:
     if args.saveFEN:
         db.insertFEN(args.fen)    
 
+board1.new_draw(piecesWithCoordinates)
+
 if piece == "K" or piece == "k":
     board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares ,args.target)
 elif piece == "Q" or piece == "q":
@@ -110,3 +112,7 @@ elif piece == "N" or piece == "n":
 
 if not os.path.exists("preferences.json"):
     Board.dump_preferences_to_json()
+
+# app = wx.App(False)
+# graphicalBoard = Board.graphicalBoard(None, 'The Ultimate Chessboard v0.1 - wxphyton')
+# app.MainLoop()

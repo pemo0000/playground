@@ -1,6 +1,7 @@
 import string
 import re
 import json
+# import wx
 from graphics import *
 
 
@@ -368,6 +369,7 @@ class Board:
                 '{}'.format(item)
                 for item in FEN2Board
             ]
+            print("FEN")
             print('\n'.join(str_list))
         return FEN2Board              
 
@@ -377,7 +379,7 @@ class Board:
         """
         FENwin = GraphWin("The Ultimate Chessboard v0.1 - display FEN", width=self.graphWinWidth, height=self.graphWinHeight)
         FENwin.setCoords(0, 0, self.boardsize * self.rectangleSize, self.boardsize * self.rectangleSize)
-        y1 = 1
+        y1 = 0
         y2 = y1 + self.rectangleSize 
         for i in range(self.boardsize - 1, -1, -1):
             x1 = 1
@@ -400,8 +402,62 @@ class Board:
             y1 += self.rectangleSize
             y2 += self.rectangleSize
 
+    def new_draw(self, piecesWithCoordinates):
+        listRepresentation = []
+        for i in range(0, self.boardsize**2):
+            listRepresentation += ' '
+        boardRepresentation = [listRepresentation[x:x+self.boardsize] for x in range(0, len(listRepresentation), self.boardsize)]
+        
+        for index, element in enumerate(piecesWithCoordinates):
+            coordinate = Board.convert_square_to_coordinate(str(piecesWithCoordinates[index][1]))
+            boardRepresentation[coordinate[1]][coordinate[0]] = element[0]
+            revBoardRepresentation = list(reversed(boardRepresentation))
+
+        splitAfterNthItem = self.boardsize 
+        str_list = [
+            '{}\n'.format(item)
+            if(((revBoardRepresentation.index(item)+1) % splitAfterNthItem) == 0)
+            else
+            '{}'.format(item)
+            for item in revBoardRepresentation
+        ]
+        print("real board")
+        print('\n'.join(str_list))
+
+        boardwin = GraphWin("The Ultimate Chessboard v0.1 - display board", width=self.graphWinWidth, height=self.graphWinHeight)
+        boardwin.setCoords(0, 0, self.boardsize * self.rectangleSize, self.boardsize * self.rectangleSize)
+        y1 = 0
+        y2 = y1 + self.rectangleSize 
+        for i in range(0, self.boardsize):
+            x1 = 1
+            x2 = x1 + self.rectangleSize 
+            for j in range(0, self.boardsize):
+                square = Rectangle(Point(x1, y1), Point(x2, y2))
+                x1 += self.rectangleSize 
+                x2 += self.rectangleSize 
+                if i & 1 != j & 1:
+                    square.setFill(Board.preferences["FEN"]["darkSquareColor"])
+                    square.draw(boardwin)
+                    if boardRepresentation[i][j] != ' ':
+                        pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), boardRepresentation[i][j] + "40.png")
+                        pieceImage.draw(boardwin)
+                else:
+                    square.draw(boardwin)
+                    if boardRepresentation[i][j] != ' ':
+                        pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), boardRepresentation[i][j] + "40.png")
+                        pieceImage.draw(boardwin)
+            y1 += self.rectangleSize
+            y2 += self.rectangleSize
+
     @staticmethod
     def dump_preferences_to_json():
         """Is dumping the preferences (stored in a dictionary) to 'preferences.json' """
         with open('preferences.json', 'w') as fp:
             json.dump(Board.preferences, fp)
+
+ #    class graphicalBoard(wx.Frame):
+ #        """ We simply derive a new class of Frame. """
+ #        def __init__(self, parent, title):
+ #            wx.Frame.__init__(self, parent, title=title, size=(200,100))
+ #            self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
+ #            self.Show(True)
