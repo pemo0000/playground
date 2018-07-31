@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import argparse
+import os
 
 from Board import *
 from DB import *
@@ -106,3 +107,6 @@ elif piece == "B" or piece == "b":
     board1.draw(piece, x, y, bishopSquares, args.flip,args. displayReachableSquares, args.target)
 elif piece == "N" or piece == "n":
     board1.draw(piece, x, y, knightSquares, args.flip, args.displayReachableSquares, args.target)
+
+if not os.path.exists("preferences.json"):
+    board1.dump_preferences_to_json()

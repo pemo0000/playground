@@ -1,5 +1,6 @@
 import string
 import re
+import json
 from graphics import *
 
 
@@ -7,11 +8,12 @@ class Board:
     """A board is always quadratic. ;-)
     Biggest board is 26x26.
     """
+    preferences = {
+                   'Default': {'darkSquareColor':'black', 'homeSquareColor':'red', 'targetSquareColor':'orange', 'captureSquareColor':'green'},
+                   'FEN':     {'darkSquareColor':'grey'}
+                  }
+
     alphabet = list(string.ascii_lowercase)
-    rectangleHomeSquareColor = "red"
-    rectangleTargetSquareColor = "orange"
-    rectangleCaptureSquareColor = "green"
-    rectangleFillColorDarkSquares = "black"
     graphWinWidth = 400
     graphWinHeight = graphWinWidth
 
@@ -33,7 +35,6 @@ class Board:
         self.offsetToCentralizeImage = self.rectangleSize / 2
         self.win = GraphWin("The Ultimate Chessboard v0.1", width=self.graphWinWidth, height=self.graphWinHeight)
         self.win.setCoords(0, 0, self.boardsize * self.rectangleSize, self.boardsize * self.rectangleSize)
-
 
     def print(self, piece, x, y, reachableSquares, flip, displayReachableSquares, coordinateOfPieceToBeCaptured):
         """Prints the board normal or flipped (180° rotated), if the script is called with -f.
@@ -91,13 +92,13 @@ class Board:
                     x1 += self.rectangleSize 
                     x2 += self.rectangleSize 
                     if i & 1 == j & 1:
-                        square.setFill(self.rectangleFillColorDarkSquares)
+                        square.setFill(Board.preferences["Default"]["darkSquareColor"])
                     square.draw(self.win)
                 y1 += self.rectangleSize
                 y2 += self.rectangleSize
             # home square of piece
             homeSquare = Board.convert_coordinate_to_rectangle(self, xflip, yflip)
-            homeSquare.setFill(self.rectangleHomeSquareColor)
+            homeSquare.setFill(Board.preferences["Default"]["homeSquareColor"])
             homeSquare.draw(self.win)
             # draw picture and reachable squares
             Board.draw_image(self, self.win, piece, xflip ,yflip)
@@ -119,7 +120,7 @@ class Board:
                 flippedXCoordinateOfPieceToBeCaptured = self.boardsize - 1 - coordinate[0]
                 flippedYCoordinateOfPieceToBeCaptured = self.boardsize - 1 - coordinate[1]
                 targetSquare = Board.convert_coordinate_to_rectangle(self, flippedXCoordinateOfPieceToBeCaptured, flippedYCoordinateOfPieceToBeCaptured)
-                targetSquare.setFill(self.rectangleCaptureSquareColor)
+                targetSquare.setFill(Board.preferences["Default"]["captureSquareColor"])
                 targetSquare.draw(self.win)
             try:
                 self.win.getMouse()
@@ -134,13 +135,13 @@ class Board:
                     x1 += self.rectangleSize 
                     x2 += self.rectangleSize 
                     if i & 1 == j & 1:
-                        square.setFill(self.rectangleFillColorDarkSquares)
+                        square.setFill(Board.preferences["Default"]["darkSquareColor"])
                     square.draw(self.win)
                 y1 += self.rectangleSize
                 y2 += self.rectangleSize
             # home square of piece
             homeSquare = Board.convert_coordinate_to_rectangle(self, x, y)
-            homeSquare.setFill(self.rectangleHomeSquareColor)
+            homeSquare.setFill(Board.preferences["Default"]["homeSquareColor"])
             homeSquare.draw(self.win)
             # draw picture and reachable squares
             Board.draw_image(self, self.win, piece, x ,y)
@@ -150,7 +151,7 @@ class Board:
             if coordinateOfPieceToBeCaptured:
                 coordinate = Board.convert_square_to_coordinate(coordinateOfPieceToBeCaptured)
                 targetSquare = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
-                targetSquare.setFill(self.rectangleCaptureSquareColor)
+                targetSquare.setFill(Board.preferences["Default"]["captureSquareColor"])
                 targetSquare.draw(self.win)
             try:
                 self.win.getMouse()
@@ -329,7 +330,7 @@ class Board:
         """
         for coordinate in targetSquares:  # type: object
             square = Board.convert_coordinate_to_rectangle(self, coordinate[0], coordinate[1])
-            square.setFill(Board.rectangleTargetSquareColor)
+            square.setFill(Board.preferences["Default"]["targetSquareColor"])
             square.draw(win)
 
     def convert_coordinate_to_rectangle(self, x, y):
@@ -386,7 +387,7 @@ class Board:
                 x1 += self.rectangleSize 
                 x2 += self.rectangleSize 
                 if i & 1 != j & 1:
-                    square.setFill("grey")
+                    square.setFill(Board.preferences["FEN"]["darkSquareColor"])
                     square.draw(FENwin)
                     if FEN2Board[i][j] != ' ':
                         pieceImage = Image(Point(x1 - self.offsetToCentralizeImageInFEN, y1 + self.offsetToCentralizeImageInFEN), FEN2Board[i][j] + "40.png")
@@ -398,3 +399,8 @@ class Board:
                         pieceImage.draw(FENwin)
             y1 += self.rectangleSize
             y2 += self.rectangleSize
+
+    def dump_preferences_to_json(self):
+        """Is dumping the preferences (stored in a dictionary) to 'preferences.json' """
+        with open('preferences.json', 'w') as fp:
+            json.dump(Board.preferences, fp)
