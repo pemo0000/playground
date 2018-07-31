@@ -70,7 +70,7 @@ for item in piecesWithCoordinates:
 check_args()
 board1 = Board(args.boardsize)
 db = DB()
-rookSquares, bishopSquares, kingSquares, knightSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y)
+rookSquares, bishopSquares, kingSquares, knightSquares, whitePawnSquares, blackPawnSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y), board1.white_pawn_squares(x, y), board1.black_pawn_squares(x, y)
 
 if piece == "K" or piece == "k":
     board1.print(piece, x, y, kingSquares, args.flip, args.displayReachableSquares, args.target)
@@ -82,11 +82,17 @@ elif piece == "B" or piece == "b":
     board1.print(piece, x, y, bishopSquares, args.flip, args.displayReachableSquares, args.target)
 elif piece == "N" or piece == "n":
     board1.print(piece, x, y, knightSquares, args.flip, args.displayReachableSquares, args.target)
+elif piece == "P":
+    board1.print(piece, x, y, whitePawnSquares, args.flip, args.displayReachableSquares, args.target)
+elif piece == "p":
+    board1.print(piece, x, y, blackPawnSquares, args.flip, args.displayReachableSquares, args.target)
 
 if  (piece == "R" or piece == "r") and Board.try_to_catch_piece(args.target, rookSquares)                   or\
     (piece == "Q" or piece == "q") and Board.try_to_catch_piece(args.target, rookSquares + bishopSquares)   or\
     (piece == "B" or piece == "b") and Board.try_to_catch_piece(args.target, bishopSquares)                 or\
     (piece == "K" or piece == "k") and Board.try_to_catch_piece(args.target, kingSquares)                   or\
+    (piece == "P") and Board.try_to_catch_piece(args.target, whitePawnSquares)                              or\
+    (piece == "p") and Board.try_to_catch_piece(args.target, blackPawnSquares)                              or\
     (piece == "N" or piece == "n") and Board.try_to_catch_piece(args.target, knightSquares):
         print("Catch!")
 else:
@@ -108,6 +114,10 @@ elif piece == "B" or piece == "b":
     board1.draw(piece, x, y, bishopSquares, args.flip,args. displayReachableSquares, args.target)
 elif piece == "N" or piece == "n":
     board1.draw(piece, x, y, knightSquares, args.flip, args.displayReachableSquares, args.target)
+elif piece == "P":
+    board1.draw(piece, x, y, whitePawnSquares, args.flip, args.displayReachableSquares, args.target)
+elif piece == "p":
+    board1.draw(piece, x, y, blackPawnSquares, args.flip, args.displayReachableSquares, args.target)
 
 if not os.path.exists("preferences.json"):
     Board.dump_preferences_to_json()

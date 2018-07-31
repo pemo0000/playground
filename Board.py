@@ -110,6 +110,10 @@ class Board:
                     flippedReachableSquares = Board.rook_squares(self, xflip, yflip)
                 elif piece == "K" or piece == "k":
                     flippedReachableSquares = Board.king_squares(self, xflip, yflip)
+                elif piece == "P":
+                    flippedReachableSquares = Board.white_pawn_squares(self, xflip, yflip)
+                elif piece == "p":
+                    flippedReachableSquares = Board.black_pawn_squares(self, xflip, yflip)
                 elif piece == "Q" or piece == "q":
                     flippedReachableSquares = Board.bishop_squares(self, xflip, yflip) + Board.rook_squares(self, xflip, yflip)
                 elif piece == "N" or piece == "n":
@@ -163,7 +167,7 @@ class Board:
         coordinate = [letter, int(items[1]) - 1]
         return coordinate
 
-    def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares):
+    def set_squares(self, piece, rookSquares, bishopSquares, kingSquares, knightSquares, whitePawnSquares, blackPawnSquares):
         """Sets the coordinates a piece can visit
         :param piece: the piece ([K]ing, [Q]ueen, [R]ook, [B]ishop or K[N]ight) chosen
         :param rookSquares: a list with lists of squares the rook can visit
@@ -186,6 +190,9 @@ class Board:
         elif piece == "N":
             for coordinate in knightSquares:
                 self.board[coordinate[1]][coordinate[0]] = "n"
+        elif piece == "P":
+            for coordinate in whitePawnSquares:
+                self.board[coordinate[1]][coordinate[0]] = "p"
 
     def __horizontal_squares(self, x, y):
         """returns a list of horizontal squares/coordinates P can visit except its own position.
@@ -258,6 +265,30 @@ class Board:
             diagonalSquaresRightDown.append([xtemp, ytemp])
 
         return diagonalSquaresRightUp + diagonalSquaresLeftDown + diagonalSquaresLeftUp + diagonalSquaresRightDown
+
+    def white_pawn_squares(self, x, y):
+        """returns a list of squares/coordinates a white pawn can visit except its own position.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of coordinates a white pawn can visit except its own position
+        """
+        if y == 1:
+            allWhitePawnSquares = [[x, y + 1], [x, y + 2]]
+        else:
+            allWhitePawnSquares = [[x, y + 1]]
+        return self.__filter_legal_squares(allWhitePawnSquares)
+
+    def black_pawn_squares(self, x, y):
+        """returns a list of squares/coordinates a black pawn can visit except its own position.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of coordinates a black pawn can visit except its own position
+        """
+        if y == 6:
+            allBlackPawnSquares = [[x, y - 1], [x, y - 2]]
+        else:
+            allBlackPawnSquares = [[x, y - 1]]
+        return self.__filter_legal_squares(allBlackPawnSquares)
 
     def king_squares(self, x, y):
         """returns a list of squares/coordinates the king  can visit except its own position.
