@@ -383,18 +383,18 @@ class Board:
             for n, i in enumerate(extendedFenWoSlashes):
                 if i.isdigit():
                     extendedFenWoSlashes[n] = ' ' 
-            FEN2Board = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
+            FEN2BoardRepresentation = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
             splitAfterNthItem = 8
             str_list = [
                 '{}\n'.format(item)
-                if(((FEN2Board.index(item)+1) % splitAfterNthItem) == 0)
+                if(((FEN2BoardRepresentation.index(item)+1) % splitAfterNthItem) == 0)
                 else
                 '{}'.format(item)
-                for item in FEN2Board
+                for item in FEN2BoardRepresentation
             ]
             print("FEN")
             print('\n'.join(str_list))
-        return FEN2Board              
+        return FEN2BoardRepresentation 
 
     def draw_fen(self, FEN2Board):
         """Is drawing the converted FEN to a board 
@@ -425,17 +425,20 @@ class Board:
             y1 += self.rectangleSize
             y2 += self.rectangleSize
 
-    def new_draw(self, piecesWithCoordinates):
+    def convert_console_input_to_board_representation(self, piecesWithCoordinates):
+        """Is converting a list of pieces with its coordinates (taken from -p and -c from console) to a board representation
+        :param piecesWithCoordinates: list of pieces and its coordinates
+        """
         listRepresentation = []
         for i in range(0, self.boardsize**2):
             listRepresentation += ' '
-        boardRepresentation = [listRepresentation[x:x+self.boardsize] for x in range(0, len(listRepresentation), self.boardsize)]
-        
+        console2BoardRepresentation = [listRepresentation[x:x+self.boardsize] for x in range(0, len(listRepresentation), self.boardsize)]
         for index, element in enumerate(piecesWithCoordinates):
             coordinate = Board.convert_square_to_coordinate(str(piecesWithCoordinates[index][1]))
-            boardRepresentation[coordinate[1]][coordinate[0]] = element[0]
-            revBoardRepresentation = list(reversed(boardRepresentation))
+            console2BoardRepresentation[coordinate[1]][coordinate[0]] = element[0]
 
+        # print reversed board representation to console, maybe for visual debugging. Not really necessary.
+        revBoardRepresentation = list(reversed(console2BoardRepresentation))
         splitAfterNthItem = self.boardsize 
         str_list = [
             '{}\n'.format(item)
@@ -447,6 +450,12 @@ class Board:
         print("real board")
         print('\n'.join(str_list))
 
+        return console2BoardRepresentation
+
+    def new_draw(self, boardRepresentation):
+        """Is drawing a graphical board
+        :param boardRepresentation: list of lists that represents a NxN board with its squares and pieces (if placed on the board)
+        """
         boardwin = GraphWin("The Ultimate Chessboard v0.1 - display board", width=self.graphWinWidth, height=self.graphWinHeight)
         boardwin.setCoords(0, 0, self.boardsize * self.rectangleSize, self.boardsize * self.rectangleSize)
         y1 = 0
