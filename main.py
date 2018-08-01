@@ -124,6 +124,10 @@ if not os.path.exists("preferences.json"):
 
 board1.new_draw(board1.convert_console_input_to_board_representation(piecesWithCoordinates))
 
-app = wx.App(False)
-graphicalBoard = Board.graphicalBoard(None, 'The Ultimate Chessboard v0.1 - wxphyton')
-app.MainLoop()
+# app = wx.App(False)
+# graphicalBoard = Board.graphicalBoard(None, 'The Ultimate Chessboard v0.1 - wxphyton')
+# app.MainLoop()
+
+ex = wx.App() 
+graphicalBoard = Board.graphicalBoard(None,'Drawing demo') 
+ex.MainLoop()

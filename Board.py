@@ -486,9 +486,45 @@ class Board:
         with open('preferences.json', 'w') as fp:
             json.dump(Board.preferences, fp)
 
-    class graphicalBoard(wx.Frame):
-        """ We simply derive a new class of Frame. """
-        def __init__(self, parent, title):
-            wx.Frame.__init__(self, parent, title=title, size=(200,100))
-            self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
-            self.Show(True)
+    class graphicalBoard(wx.Frame): 
+                
+       def __init__(self, parent, title): 
+          super(Board.graphicalBoard, self).__init__(parent, title = "Ich dreh durch!", size = (300,300))  
+          self.InitUI() 
+             
+       def InitUI(self): 
+          self.CreateStatusBar()
+          # Setting up the menu.
+          filemenu= wx.Menu()
+          menuAbout= filemenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
+          menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Terminate the program")
+
+          # Creating the menubar.
+          menuBar = wx.MenuBar()
+          menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
+          self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
+          self.Bind(wx.EVT_PAINT, self.OnPaint) 
+          self.Centre() 
+          self.Show(True)
+
+          # Events.
+          self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
+          self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
+          
+          # Drawing image.
+          wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("p40.png", wx.BITMAP_TYPE_ANY), pos=(110, 210))
+    		
+       def OnPaint(self, e): 
+          dc = wx.PaintDC(self) 
+          dc.DrawRectangle(10, 150, 50, 50) 
+          dc.SetBrush(wx.Brush(wx.Colour(155,155,155)))
+          dc.DrawRectangle(60, 150, 50, 50) 
+
+       def OnAbout(self,e):
+          # Create a message dialog box
+          dlg = wx.MessageDialog(self, " Maybe the Ultimate Chess Playground. \n Developped by E8 under strong code and design control of E1.", "About Ultimate Chess Playground", wx.OK)
+          dlg.ShowModal()
+          dlg.Destroy()
+
+       def OnExit(self,e):
+           self.Close(True)
