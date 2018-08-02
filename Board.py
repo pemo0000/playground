@@ -489,7 +489,14 @@ class Board:
     class graphicalBoard(wx.Frame): 
                 
        def __init__(self, parent, title): 
-          super(Board.graphicalBoard, self).__init__(parent, title = "Ich dreh durch!", size = (300,300))  
+
+          boardsize = 8 
+          boardWidth = 400
+          boardHeigth = boardWidth
+          sizeStatusbar = 70
+          rectangleSize = boardWidth / boardsize
+
+          super(Board.graphicalBoard, self).__init__(parent, title = "Ich dreh durch! ;-)", size = (boardWidth,boardHeigth + sizeStatusbar))  
           self.InitUI() 
              
        def InitUI(self): 
@@ -512,13 +519,24 @@ class Board:
           self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
           
           # Drawing image.
-          wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("p40.png", wx.BITMAP_TYPE_ANY), pos=(110, 210))
+          wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("n40.png", wx.BITMAP_TYPE_ANY), pos=(110, 210))
     		
        def OnPaint(self, e): 
+          boardsize = 8
+          x = 0
+          y = 0
           dc = wx.PaintDC(self) 
-          dc.DrawRectangle(10, 150, 50, 50) 
-          dc.SetBrush(wx.Brush(wx.Colour(155,155,155)))
-          dc.DrawRectangle(60, 150, 50, 50) 
+          for i in range(0, boardsize):
+              for j in range(0, boardsize):
+                  if i & 1 == j & 1:
+                      dc.SetBrush(wx.Brush(wx.Colour(255,255,255)))
+                      dc.DrawRectangle(x, y, 50, 50) 
+                  else:
+                      dc.SetBrush(wx.Brush(wx.Colour(155,155,155)))
+                      dc.DrawRectangle(x, y, 50, 50) 
+                  x = x + 49
+              x = 0
+              y = y + 49
 
        def OnAbout(self,e):
           # Create a message dialog box
