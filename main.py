@@ -125,10 +125,7 @@ if not os.path.exists("preferences.json"):
 
 board1.new_draw(board1.convert_console_input_to_board_representation(piecesWithCoordinates))
 
-# 1st UI try
+# 1st new UI try with wxpython - pushed UI to UI.py
 app = wx.App(False)
-Board.graphicalBoard(None, 'The Ultimate Chessboard v0.1 - wxphyton')
+ui1 = UI(None, 'The Ultimate Chessboard v0.1 - wxphyton', args.boardsize)
 app.MainLoop()
-
-# 2rd try - in neue Klasse UI ausgelagert
-ui = UI(None, "Test3")

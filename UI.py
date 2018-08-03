@@ -1,53 +1,68 @@
 import wx
 
-class UI(wx.Frame):
+class UI(wx.Frame): 
+   preferences = {
+           'Default': {'darkSquareColor':'grey', 'lightSquareColor':'white', 'homeSquareColor':'red', 'targetSquareColor':'orange', 'captureSquareColor':'green'},
+           'FEN':     {'darkSquareColor':'grey'}
+                  }
+   boardWidth = 400
+   boardHeigth = boardWidth
+   sizeStatusbar = 65
+            
+   def __init__(self, parent, title, boardsize): 
+      self.boardsize = boardsize
+      self.rectangleSize = UI.boardWidth / self.boardsize
+      super(UI, self).__init__(parent, title = "Ich dreh durch! ;-)", size = (UI.boardWidth, UI.boardHeigth + UI.sizeStatusbar))  
+      self.InitUI() 
+         
+   def InitUI(self): 
+      self.CreateStatusBar()
+      self.SetStatusText("This is the statusbar")
+      # Setting up the menu.
+      filemenu= wx.Menu()
+      menuAbout= filemenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
+      menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Terminate the program")
 
-    app = wx.App(False)
-    frame = wx.Frame(None, title="Draw on Panel")
-    panel = wx.Panel(frame)
+      # Creating the menubar.
+      menuBar = wx.MenuBar()
+      menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
+      self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
+      self.Bind(wx.EVT_PAINT, self.OnPaint) 
+      self.Centre() 
+      self.Show(True)
 
-    def __init__(self, parent, title): 
-        #boardsize = 8 
-        #boardWidth = 400
-        #boardHeigth = boardWidth
-        #sizeStatusbar = 70
-        #rectangleSize = boardWidth / boardsize
+      # Events.
+      self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
+      self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
+      
+      # Drawing test images.
+      bmp = wx.Bitmap("p40.png")
+      wx.StaticBitmap(self, bitmap=bmp, pos=(58,55))
+      bmp1 = wx.Bitmap("P40.png")
+      wx.StaticBitmap(self, bitmap=bmp1, pos=(205,201))
+		
+   def OnPaint(self, e): 
+      x = 0
+      y = 0
+      dc = wx.PaintDC(self) 
+      for i in range(0, self.boardsize):
+          for j in range(0, self.boardsize):
+              if i & 1 == j & 1:
+                  dc.SetBrush(wx.Brush(wx.Colour(UI.preferences["Default"]["lightSquareColor"])))
+                  dc.DrawRectangle(x, y, self.rectangleSize, self.rectangleSize) 
+              else:
+                  dc.SetBrush(wx.Brush(wx.Colour(UI.preferences["Default"]["darkSquareColor"])))
+                  dc.DrawRectangle(x, y, self.rectangleSize, self.rectangleSize) 
+              x = x + self.rectangleSize - 1 
+          x = 0
+          y = y + self.rectangleSize - 1
 
-        # Setting up the menu.
-        filemenu= wx.Menu()
-        menuAbout= filemenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
-        menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Terminate the program")
+   def OnAbout(self,e):
+      # Create a message dialog box
+      dlg = wx.MessageDialog(self, " Maybe the Ultimate Chess Playground. \n Developped by E8 under strong code and design control of E1.", "About Ultimate Chess Playground", wx.OK)
+      dlg.ShowModal()
+      dlg.Destroy()
 
-        # Creating the menubar.
-        menuBar = wx.MenuBar()
-        menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
-        #self.SetMenuBar(UI.frame)  # Adding the MenuBar to the Frame content.
-        #self.Bind(wx.EVT_PAINT, self.OnPaint) 
-        #self.Centre() 
-        #self.Show(True)
+   def OnExit(self,e):
+       self.Close(True)
 
-    def on_paint(event):
-        dc = wx.PaintDC(event.GetEventObject())
-        dc.Clear()
-
-        boardsize = 8
-        x = 0
-        y = 0
-        for i in range(0, boardsize):
-            for j in range(0, boardsize):
-                if i & 1 == j & 1:
-                    dc.SetBrush(wx.Brush(wx.Colour(255,255,255)))
-                    dc.DrawRectangle(x, y, 50, 50) 
-                else:
-                    dc.SetBrush(wx.Brush(wx.Colour(155,155,155)))
-                    dc.DrawRectangle(x, y, 50, 50) 
-                x = x + 49
-            x = 0
-            y = y + 49
-
-    bmp = wx.Bitmap('k40.png')
-    wx.StaticBitmap(panel, bitmap=bmp, pos=(5,5))
-    
-    panel.Bind(wx.EVT_PAINT, on_paint)
-    frame.Show(True)
-    app.MainLoop()
