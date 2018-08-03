@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 import argparse
-import os
+import sys, os, platform, wx
 
 from Board import *
 from DB import *
+from UI import *
 
 print("Running...\n")
 
@@ -124,10 +125,10 @@ if not os.path.exists("preferences.json"):
 
 board1.new_draw(board1.convert_console_input_to_board_representation(piecesWithCoordinates))
 
-# app = wx.App(False)
-# graphicalBoard = Board.graphicalBoard(None, 'The Ultimate Chessboard v0.1 - wxphyton')
-# app.MainLoop()
+# 1st UI try
+app = wx.App(False)
+Board.graphicalBoard(None, 'The Ultimate Chessboard v0.1 - wxphyton')
+app.MainLoop()
 
-ex = wx.App() 
-graphicalBoard = Board.graphicalBoard(None,'Drawing demo') 
-ex.MainLoop()
+# 2rd try - in neue Klasse UI ausgelagert
+ui = UI(None, "Test3")

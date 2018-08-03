@@ -519,7 +519,10 @@ class Board:
           self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
           
           # Drawing image.
-          wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("n40.png", wx.BITMAP_TYPE_ANY), pos=(110, 210))
+          bmp = wx.Bitmap("p40.png")
+          wx.StaticBitmap(self, bitmap=bmp, pos=(58,55))
+          bmp1 = wx.Bitmap("P40.png")
+          wx.StaticBitmap(self, bitmap=bmp1, pos=(205,201))
     		
        def OnPaint(self, e): 
           boardsize = 8
