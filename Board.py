@@ -383,18 +383,40 @@ class Board:
             for n, i in enumerate(extendedFenWoSlashes):
                 if i.isdigit():
                     extendedFenWoSlashes[n] = ' ' 
-            FEN2BoardRepresentation = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
+            board = [extendedFenWoSlashes[x:x+8] for x in range(0, len(extendedFenWoSlashes), 8)]
             splitAfterNthItem = 8
             str_list = [
                 '{}\n'.format(item)
-                if(((FEN2BoardRepresentation.index(item)+1) % splitAfterNthItem) == 0)
+                if(((board .index(item)+1) % splitAfterNthItem) == 0)
                 else
                 '{}'.format(item)
-                for item in FEN2BoardRepresentation
+                for item in board 
             ]
-            print("FEN")
+            print("board")
             print('\n'.join(str_list))
-        return FEN2BoardRepresentation 
+        return board 
+
+    @staticmethod
+    def convert_board_representation_to_fen(board):
+        """Is converting a board like representation into FEN (Forsyth-Edwards-Notation)
+        :param board: a list of lists in which each item represents a square of a chessboard and its piece if placed on it
+        """
+        fen = ''
+        for linenr, line in enumerate(board):
+            spacecount = 0
+            for item in line:
+                if item == ' ':
+                    spacecount += 1
+                else:
+                    if spacecount:
+                        fen += str(spacecount)
+                        spacecount = 0
+                    fen += item
+            if spacecount:
+                fen += str(spacecount)
+            if linenr < len(board) - 1:
+                fen += '/'
+        return fen
 
     def draw_fen(self, FEN2Board):
         """Is drawing the converted FEN to a board 
