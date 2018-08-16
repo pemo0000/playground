@@ -104,7 +104,6 @@ if args.boardsize == 8 and args.fen:
     if args.saveFEN:
         db.insertFEN(args.fen)    
 
-
 if piece == "K" or piece == "k":
     board1.draw(piece, x, y, kingSquares, args.flip, args.displayReachableSquares ,args.target)
 elif piece == "Q" or piece == "q":

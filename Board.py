@@ -20,6 +20,7 @@ class Board:
 
     def __init__(self, boardsize):
         """Constructor"""
+        __slots__ = ['boardsize', 'board', 'templine', 'rectangleSize', 'offsetToCentralizeImageInFEN', 'offsetToCentralizeImage', 'win']
         self.boardsize = boardsize
         self.board = []
         for i in range(0, boardsize):
@@ -507,4 +508,3 @@ class Board:
         """Is dumping the preferences (stored in a dictionary) to 'preferences.json' """
         with open('preferences.json', 'w') as fp:
             json.dump(Board.preferences, fp)
-

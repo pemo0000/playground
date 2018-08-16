@@ -29,12 +29,18 @@ class DB:
         data = self.cursor.fetchone()[0]
         if data == 0: 
             stockfish = Stockfish('/usr/games/stockfish')
-            stockfish.set_fen_position("r4rnk/1pp4p/3p4/3P1b2/1PPbpBPq/8/2QNB1KP/1R3R2 w KQkq - 0 25")
+            stockfish.set_fen_position(fen)
             bestmove = stockfish.get_best_move()
         try:
            self.cursor.execute("insert into FEN(fen, bestmove) values(?,?);", (str([fen]), bestmove))
         except sqlite3.IntegrityError:
             pass
+
+    def select_random_FEN(self):
+        """Is returning a random FEN """
+        self.cursor.execute("select * from FEN order by random() limit 1;")
+        randomFEN = self.cursor.fetchone()[0]
+        return randomFEN
 
     def __del__(self):
         """Destructor"""
