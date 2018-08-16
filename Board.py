@@ -311,6 +311,24 @@ class Board:
                             [x + 1, y + 2], [x + 2, y + 1], [x + 2, y - 1]]
         return self.__filter_legal_squares(allKnightSquares)
 
+    def white_pawn_capture_squares(self, x, y):
+        """returns a list of squares/coordinates, where a white pawn can capture a piece.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of coordinates, where a white pawn can capture a piece
+        """
+        whitePawnCaptureSquares = [[x + 1, y + 1], [x - 1, y + 1]]
+        return self.__filter_legal_squares(whitePawnCaptureSquares)
+
+    def black_pawn_capture_squares(self, x, y):
+        """returns a list of squares/coordinates, where a black pawn can capture a piece.
+        :param x: x coordinate where the piece is put, beginning at 0
+        :param y: y coordinate where the piece is put, beginning at 0
+        :return: a list with lists of coordinates, where a black pawn can capture a piece
+        """
+        blackPawnCaptureSquares = [[x + 1, y - 1], [x - 1, y - 1]]
+        return self.__filter_legal_squares(blackPawnCaptureSquares)
+
     def __filter_legal_squares(self, reachableSquares):
         """returns a list of "valid" squares/coordinates a piece can visit except its own position.
         :param reachableSquares: a list with list of all coordinates a piece can visit. Could contain coordinates outside the board.

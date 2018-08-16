@@ -71,7 +71,7 @@ for item in piecesWithCoordinates:
 check_args()
 board1 = Board(args.boardsize)
 db = DB()
-rookSquares, bishopSquares, kingSquares, knightSquares, whitePawnSquares, blackPawnSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y), board1.white_pawn_squares(x, y), board1.black_pawn_squares(x, y)
+rookSquares, bishopSquares, kingSquares, knightSquares, whitePawnSquares, blackPawnSquares, whitePawnCaptureSquares, blackPawnCaptureSquares = board1.rook_squares(x, y), board1.bishop_squares(x, y), board1.king_squares(x, y), board1.knight_squares(x, y), board1.white_pawn_squares(x, y), board1.black_pawn_squares(x, y), board1.white_pawn_capture_squares(x, y), board1.black_pawn_capture_squares(x, y)
 
 if piece == "K" or piece == "k":
     board1.print(piece, x, y, kingSquares, args.flip, args.displayReachableSquares, args.target)
@@ -92,8 +92,8 @@ if  (piece == "R" or piece == "r") and Board.try_to_catch_piece(args.target, roo
     (piece == "Q" or piece == "q") and Board.try_to_catch_piece(args.target, rookSquares + bishopSquares)   or\
     (piece == "B" or piece == "b") and Board.try_to_catch_piece(args.target, bishopSquares)                 or\
     (piece == "K" or piece == "k") and Board.try_to_catch_piece(args.target, kingSquares)                   or\
-    (piece == "P") and Board.try_to_catch_piece(args.target, whitePawnSquares)                              or\
-    (piece == "p") and Board.try_to_catch_piece(args.target, blackPawnSquares)                              or\
+    (piece == "P") and Board.try_to_catch_piece(args.target, whitePawnCaptureSquares)                       or\
+    (piece == "p") and Board.try_to_catch_piece(args.target, blackPawnCaptureSquares)                       or\
     (piece == "N" or piece == "n") and Board.try_to_catch_piece(args.target, knightSquares):
         print("Catch!")
 else:
