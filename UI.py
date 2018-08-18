@@ -1,68 +1,66 @@
 import wx
 
-class UI(wx.Frame): 
-   preferences = {
-           'Default': {'darkSquareColor':'grey', 'lightSquareColor':'white', 'homeSquareColor':'red', 'targetSquareColor':'orange', 'captureSquareColor':'green'},
-           'FEN':     {'darkSquareColor':'grey'}
+class View(wx.Panel):
+  preferences = {
+          'Default': {'darkSquareColor':'grey', 'lightSquareColor':'white', 'homeSquareColor':'red', 'targetSquareColor':'orange', 'captureSquareColor':'green'},
+          'FEN':     {'darkSquareColor':'grey'}
                   }
-   boardWidth = 400
-   boardHeigth = boardWidth
-   sizeStatusbar = 65
-            
-   def __init__(self, parent, title, boardsize): 
-      self.boardsize = boardsize
-      self.rectangleSize = UI.boardWidth / self.boardsize
-      super(UI, self).__init__(parent, title = "Ich dreh durch! ;-)", size = (UI.boardWidth, UI.boardHeigth + UI.sizeStatusbar))  
-      self.InitUI() 
-         
-   def InitUI(self): 
-      self.CreateStatusBar()
-      self.SetStatusText("This is the statusbar")
-      # Setting up the menu.
-      filemenu= wx.Menu()
-      menuAbout= filemenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
-      menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Terminate the program")
+  def __init__(self, parent):
+    super(View, self).__init__(parent)
+    self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+    self.Bind(wx.EVT_SIZE, self.on_size)
+    self.Bind(wx.EVT_PAINT, self.on_paint)
+    self.boardsize = 8
 
-      # Creating the menubar.
-      menuBar = wx.MenuBar()
-      menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
-      self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
-      self.Bind(wx.EVT_PAINT, self.OnPaint) 
-      self.Centre() 
-      self.Show(True)
+  def on_size(self, event):
+    event.Skip()
+    self.Refresh()
 
-      # Events.
-      self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
-      self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
-      
-      # Drawing test images.
-      bmp = wx.Bitmap("p40.png")
-      wx.StaticBitmap(self, bitmap=bmp, pos=(58,55))
-      bmp1 = wx.Bitmap("P40.png")
-      wx.StaticBitmap(self, bitmap=bmp1, pos=(205,201))
-		
-   def OnPaint(self, e): 
+  def on_paint(self, event):
+    w, h = self.GetClientSize()
+    dc = wx.AutoBufferedPaintDC(self)
+    dc.Clear()
+    rectangleSize = h/self.boardsize
+    x=y=0
+    for i in range(0,self.boardsize):
+      for j in range(0,self.boardsize):
+        if i & 1 != j & 1:
+          dc.SetBrush(wx.Brush(wx.Colour(self.preferences["Default"]["darkSquareColor"])))
+          dc.DrawRectangle(x, y, rectangleSize, rectangleSize)
+        else:
+          dc.SetBrush(wx.Brush(wx.Colour(self.preferences["Default"]["lightSquareColor"])))
+          dc.DrawRectangle(x, y, rectangleSize, rectangleSize)
+        x = x + rectangleSize - 2
       x = 0
-      y = 0
-      dc = wx.PaintDC(self) 
-      for i in range(0, self.boardsize):
-          for j in range(0, self.boardsize):
-              if i & 1 == j & 1:
-                  dc.SetBrush(wx.Brush(wx.Colour(UI.preferences["Default"]["lightSquareColor"])))
-                  dc.DrawRectangle(x, y, self.rectangleSize, self.rectangleSize) 
-              else:
-                  dc.SetBrush(wx.Brush(wx.Colour(UI.preferences["Default"]["darkSquareColor"])))
-                  dc.DrawRectangle(x, y, self.rectangleSize, self.rectangleSize) 
-              x = x + self.rectangleSize - 1 
-          x = 0
-          y = y + self.rectangleSize - 1
+      y = y + rectangleSize - 2
 
-   def OnAbout(self,e):
-      # Create a message dialog box
-      dlg = wx.MessageDialog(self, " Maybe the Ultimate Chess Playground. \n Developped by E8 under strong code and design control of E1.", "About Ultimate Chess Playground", wx.OK)
-      dlg.ShowModal()
-      dlg.Destroy()
+class Frame(wx.Frame):
+  def __init__(self):
+    super(Frame, self).__init__(None)
+    self.SetTitle('strulls wx board in pemos playground')
+    self.SetClientSize((500, 500))
+    self.Center()
+    self.view = View(self)
+    self.CreateStatusBar()
+    self.SetStatusText("Statusbar")
+    filemenu= wx.Menu()
+    menuAbout= filemenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
+    menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Terminate the program")
+    menuBar = wx.MenuBar()
+    menuBar.Append(filemenu,"&File")
+    self.SetMenuBar(menuBar)
+    self.Centre() 
+    self.Show(True)
+    self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
+    self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
+    # Drawing test images...
+    bmp = wx.Bitmap("p40.png")
+    wx.StaticBitmap(self, bitmap=bmp, pos=(58,55))
 
-   def OnExit(self,e):
-       self.Close(True)
+  def OnAbout(self,e):
+     dlg = wx.MessageDialog(self, "Maybe the Ultimate Chess Playground.\nDevelopped by E8 under strong code and design control of E1.", "About the Ultimate Chess Playground", wx.OK)
+     dlg.ShowModal()
+     dlg.Destroy()
 
+  def OnExit(self,e):
+      self.Close(True)
